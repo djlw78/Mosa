@@ -14,7 +14,7 @@ namespace Mosa.Platforms.x86
     /// <summary>
     /// Determines features provided by an architecture.
     /// </summary>
-    [ Flags ]
+    [Flags()]
     public enum ArchitectureFeatureFlags
     {
         /// <summary>
@@ -50,7 +50,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// The x86 architecture supports 3DNow.
         /// </summary>
-        ThreeDNow,
+        ThreeDNow
 
         // FIXME: Add more instructions set specific flags
     }

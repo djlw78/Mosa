@@ -23,7 +23,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         private readonly bool _isCallerSave;
 
-        #endregion // Data members
+        #endregion
 
         #region Construction
 
@@ -32,13 +32,12 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="index"></param>
         /// <param name="callerSaved">True if this register is caller saved, otherwise false.</param>
-        protected GenericX86Register(int index, bool callerSaved) :
-            base(index)
+        protected GenericX86Register (int index, bool callerSaved) : base(index)
         {
             _isCallerSave = callerSaved;
         }
 
-        #endregion // Construction
+        #endregion
 
         #region Properties
 
@@ -51,6 +50,6 @@ namespace Mosa.Platforms.x86
             get { return _isCallerSave; }
         }
 
-        #endregion // Properties
+        #endregion
     }
 }

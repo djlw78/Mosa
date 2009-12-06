@@ -29,8 +29,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Defines the register set of the target architecture.
         /// </summary>
-        private static readonly Register[] Registers = new Register[]
-        {
+        private static readonly Register[] Registers = new Register[] {
             ////////////////////////////////////////////////////////
             // 32-bit general purpose registers
             ////////////////////////////////////////////////////////
@@ -57,20 +56,55 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Maps constraints to an instruction. Deprecated.
         /// </summary>
-        private static readonly Dictionary<Type, Type> Constraints = new Dictionary<Type, Type>
-        {
-            { typeof(CPUx86.AddInstruction), typeof(GPRConstraint) },
-            { typeof(CPUx86.AdcInstruction), typeof(GPRConstraint) },
-            { typeof(CPUx86.DivInstruction), typeof(DivConstraint) },
-            { typeof(CPUx86.AndInstruction), typeof(LogicalAndConstraint) },
-            { typeof(CPUx86.OrInstruction), typeof(LogicalOrConstraint) },
-            { typeof(CPUx86.XorInstruction), typeof(LogicalXorConstraint) },
-            { typeof(CPUx86.MovInstruction), typeof(MoveConstraint) },
-            { typeof(CPUx86.MulInstruction), typeof(MulConstraint) },
-            { typeof(CPUx86.SarInstruction), typeof(ShiftConstraint) },
-            { typeof(CPUx86.ShlInstruction), typeof(ShiftConstraint) },
-            { typeof(CPUx86.ShrInstruction), typeof(ShiftConstraint) },
-            { typeof(CPUx86.SubInstruction), typeof(GPRConstraint) },
+        private static readonly Dictionary<Type, Type> Constraints = new Dictionary<Type, Type> {
+            {
+                typeof(CPUx86.AddInstruction),
+                typeof(GPRConstraint)
+            },
+            {
+                typeof(CPUx86.AdcInstruction),
+                typeof(GPRConstraint)
+            },
+            {
+                typeof(CPUx86.DivInstruction),
+                typeof(DivConstraint)
+            },
+            {
+                typeof(CPUx86.AndInstruction),
+                typeof(LogicalAndConstraint)
+            },
+            {
+                typeof(CPUx86.OrInstruction),
+                typeof(LogicalOrConstraint)
+            },
+            {
+                typeof(CPUx86.XorInstruction),
+                typeof(LogicalXorConstraint)
+            },
+            {
+                typeof(CPUx86.MovInstruction),
+                typeof(MoveConstraint)
+            },
+            {
+                typeof(CPUx86.MulInstruction),
+                typeof(MulConstraint)
+            },
+            {
+                typeof(CPUx86.SarInstruction),
+                typeof(ShiftConstraint)
+            },
+            {
+                typeof(CPUx86.ShlInstruction),
+                typeof(ShiftConstraint)
+            },
+            {
+                typeof(CPUx86.ShrInstruction),
+                typeof(ShiftConstraint)
+            },
+            {
+                typeof(CPUx86.SubInstruction),
+                typeof(GPRConstraint)
+            }
         };
 
         /// <summary>
@@ -82,7 +116,7 @@ namespace Mosa.Platforms.x86
         /// Initializes a new instance of the <see cref="Architecture"/> class.
         /// </summary>
         /// <param name="architectureFeatures">The features this architecture supports.</param>
-        private Architecture(ArchitectureFeatureFlags architectureFeatures)
+        private Architecture (ArchitectureFeatureFlags architectureFeatures)
         {
             _architectureFeatures = architectureFeatures;
         }
@@ -91,24 +125,21 @@ namespace Mosa.Platforms.x86
         /// Retrieves the native integer size of the x86 platform.
         /// </summary>
         /// <value>This property always returns 32.</value>
-        public override int NativeIntegerSize
-        {
+        public override int NativeIntegerSize {
             get { return 32; }
         }
 
         /// <summary>
         /// Retrieves the register set of the x86 platform.
         /// </summary>
-        public override Register[] RegisterSet
-        {
+        public override Register[] RegisterSet {
             get { return Registers; }
         }
 
         /// <summary>
         /// Retrieves the stack frame register of the x86.
         /// </summary>
-        public override Register StackFrameRegister
-        {
+        public override Register StackFrameRegister {
             get { return GeneralPurposeRegister.EBP; }
         }
 
@@ -121,12 +152,12 @@ namespace Mosa.Platforms.x86
         /// This method creates an instance of an appropriate architecture class, which supports the specific
         /// architecture features.
         /// </remarks>
-        public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
+        public static IArchitecture CreateArchitecture (ArchitectureFeatureFlags architectureFeatures)
         {
             if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
                 architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;
 
-            return new Architecture(architectureFeatures);
+            return new Architecture (architectureFeatures);
         }
 
         /// <summary>
@@ -136,16 +167,16 @@ namespace Mosa.Platforms.x86
         /// <param name="instructionLabel">The label of the instruction requesting the operand.</param>
         /// <param name="operandStackIndex">The stack index of the operand.</param>
         /// <returns>A new operand usable as a result operand.</returns>
-        public override Operand CreateResultOperand(SigType signatureType, int instructionLabel, int operandStackIndex)
+        public override Operand CreateResultOperand (SigType signatureType, int instructionLabel, int operandStackIndex)
         {
-            return new RegisterOperand(signatureType, GeneralPurposeRegister.EAX);
+            return new RegisterOperand (signatureType, GeneralPurposeRegister.EAX);
         }
 
         /// <summary>
         /// Extends the assembly compiler pipeline with x86 specific stages.
         /// </summary>
         /// <param name="assemblyCompilerPipeline">The assembly compiler pipeline to extend.</param>
-        public override void ExtendAssemblyCompilerPipeline(CompilerPipeline assemblyCompilerPipeline)
+        public override void ExtendAssemblyCompilerPipeline (CompilerPipeline assemblyCompilerPipeline)
         {
         }
 
@@ -153,30 +184,28 @@ namespace Mosa.Platforms.x86
         /// Extends the method compiler pipeline with x86 specific stages.
         /// </summary>
         /// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
-        public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
+        public override void ExtendMethodCompilerPipeline (CompilerPipeline methodCompilerPipeline)
         {
             // FIXME: Create a specific code generator instance using requested feature flags.
             // FIXME: Add some more optimization passes, which take advantage of advanced x86 instructions
             // and packed operations available with MMX/SSE extensions
-            methodCompilerPipeline.AddRange(
-                new IMethodCompilerStage[]
-                {
-                    new LongOperandTransformationStage(),
-					new InstructionLogger(typeof(LongOperandTransformationStage)),
-                    new AddressModeConversionStage(),
-					new InstructionLogger(typeof(AddressModeConversionStage)),
-                    new CILTransformationStage(),
-					new InstructionLogger(typeof(CILTransformationStage)),
-                    new IRTransformationStage(),
-					new InstructionLogger(typeof(IRTransformationStage)),
-					new TweakTransformationStage(),
-					new InstructionLogger(typeof(TweakTransformationStage)),
-					new MemToMemConversionStage(),
-					new InstructionLogger(typeof(MemToMemConversionStage)),
-                    new SimplePeepholeOptimizationStage(),
-					new InstructionLogger(typeof(SimplePeepholeOptimizationStage)),
-                    //FlowGraphVisualizationStage.Instance,
-                });
+            methodCompilerPipeline.AddRange (new IMethodCompilerStage[] {
+                new LongOperandTransformationStage (),
+                new InstructionLogger (typeof(LongOperandTransformationStage)),
+                new AddressModeConversionStage (),
+                new InstructionLogger (typeof(AddressModeConversionStage)),
+                new CILTransformationStage (),
+                new InstructionLogger (typeof(CILTransformationStage)),
+                new IRTransformationStage (),
+                new InstructionLogger (typeof(IRTransformationStage)),
+                new TweakTransformationStage (),
+                new InstructionLogger (typeof(TweakTransformationStage)),
+                new MemToMemConversionStage (),
+                new InstructionLogger (typeof(MemToMemConversionStage)),
+                new SimplePeepholeOptimizationStage (),
+                new InstructionLogger (typeof(SimplePeepholeOptimizationStage))
+                //FlowGraphVisualizationStage.Instance,
+            });
         }
 
         /// <summary>
@@ -185,15 +214,14 @@ namespace Mosa.Platforms.x86
         /// <param name="callingConvention">One of the defined calling conventions.</param>
         /// <returns>An instance of <see cref="ICallingConvention"/>.</returns>
         /// <exception cref="System.NotSupportedException"><paramref name="callingConvention"/> is not a supported calling convention.</exception>
-        public override ICallingConvention GetCallingConvention(CallingConvention callingConvention)
+        public override ICallingConvention GetCallingConvention (CallingConvention callingConvention)
         {
-            switch (callingConvention)
-            {
-                case CallingConvention.Default:
-                    return new DefaultCallingConvention(this);
+            switch (callingConvention) {
+            case CallingConvention.Default:
+                return new DefaultCallingConvention (this);
+            default:
 
-                default:
-                    throw new NotSupportedException();
+                throw new NotSupportedException ();
             }
         }
 
@@ -203,33 +231,33 @@ namespace Mosa.Platforms.x86
         /// <param name="signatureType">The signature type.</param>
         /// <param name="memorySize">Receives the memory size of the type.</param>
         /// <param name="alignment">Receives alignment requirements of the type.</param>
-        public override void GetTypeRequirements(SigType signatureType, out int memorySize, out int alignment)
+        public override void GetTypeRequirements (SigType signatureType, out int memorySize, out int alignment)
         {
             if (signatureType == null)
-                throw new ArgumentNullException("signatureType");
+                throw new ArgumentNullException ("signatureType");
 
-            switch (signatureType.Type)
-            {
-                case CilElementType.R4:
-                    memorySize = alignment = 4;
-                    break;
-                case CilElementType.R8:
-                    // Default alignment and size are 4
-                    memorySize = alignment = 8;
-                    break;
+            switch (signatureType.Type) {
+            case CilElementType.R4:
+                memorySize = alignment = 4;
+                break;
+            case CilElementType.R8:
+                // Default alignment and size are 4
+                memorySize = alignment = 8;
+                break;
 
-                case CilElementType.I8:
-                    goto case CilElementType.U8;
-                case CilElementType.U8:
-                    memorySize = alignment = 8;
-                    break;
+            case CilElementType.I8:
+                goto case CilElementType.U8;
+            case CilElementType.U8:
+                memorySize = alignment = 8;
+                break;
 
-                case CilElementType.ValueType:
-                    memorySize = alignment = 4; // FIXME: HACK!
-                    break;
-                default:
-                    memorySize = alignment = 4;
-                    break;
+            case CilElementType.ValueType:
+                memorySize = alignment = 4;
+                // FIXME: HACK!
+                break;
+            default:
+                memorySize = alignment = 4;
+                break;
             }
         }
 
@@ -238,18 +266,18 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-		public override IIntrinsicInstruction GetIntrinsicIntruction(Type type)
+        public override IIntrinsicInstruction GetIntrinsicIntruction (Type type)
         {
-            return CPUx86.Intrinsics.Get(type);
+            return CPUx86.Intrinsics.Get (type);
         }
 
         /// <summary>
         /// Gets the code emitter.
         /// </summary>
         /// <returns></returns>
-        public override ICodeEmitter GetCodeEmitter()
+        public override ICodeEmitter GetCodeEmitter ()
         {
-            return new MachineCodeEmitter();
+            return new MachineCodeEmitter ();
         }
     }
 }

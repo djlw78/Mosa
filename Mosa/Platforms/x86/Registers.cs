@@ -181,7 +181,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// 
         /// </summary>
-        FP  = 41,
+        FP = 41,
         /// <summary>
         /// 
         /// </summary>

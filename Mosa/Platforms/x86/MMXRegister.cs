@@ -23,44 +23,44 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Represents the MMX register MM0.
         /// </summary>
-        public static readonly MMXRegister MM0 = new MMXRegister(8, 0);
+        public static readonly MMXRegister MM0 = new MMXRegister (8, 0);
 
         /// <summary>
         /// Represents the MMX register MM1.
         /// </summary>
-        public static readonly MMXRegister MM1 = new MMXRegister(9, 1);
+        public static readonly MMXRegister MM1 = new MMXRegister (9, 1);
 
         /// <summary>
         /// Represents the MMX register MM2.
         /// </summary>
-        public static readonly MMXRegister MM2 = new MMXRegister(10, 2);
+        public static readonly MMXRegister MM2 = new MMXRegister (10, 2);
 
         /// <summary>
         /// Represents the MMX register MM3.
         /// </summary>
-        public static readonly MMXRegister MM3 = new MMXRegister(11, 3);
+        public static readonly MMXRegister MM3 = new MMXRegister (11, 3);
 
         /// <summary>
         /// Represents the MMX register MM4.
         /// </summary>
-        public static readonly MMXRegister MM4 = new MMXRegister(12, 4);
+        public static readonly MMXRegister MM4 = new MMXRegister (12, 4);
 
         /// <summary>
         /// Represents the MMX register MM5.
         /// </summary>
-        public static readonly MMXRegister MM5 = new MMXRegister(13, 5);
+        public static readonly MMXRegister MM5 = new MMXRegister (13, 5);
 
         /// <summary>
         /// Represents the MMX register MM6.
         /// </summary>
-        public static readonly MMXRegister MM6 = new MMXRegister(14, 6);
+        public static readonly MMXRegister MM6 = new MMXRegister (14, 6);
 
         /// <summary>
         /// Represents the MMX register MM7.
         /// </summary>
-        public static readonly MMXRegister MM7 = new MMXRegister(15, 7);
+        public static readonly MMXRegister MM7 = new MMXRegister (15, 7);
 
-        #endregion // Static data members
+        #endregion
 
         #region Data members
 
@@ -69,7 +69,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         private int _registerCode;
 
-        #endregion // Data members
+        #endregion
 
         #region Construction
 
@@ -78,13 +78,12 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="index"></param>
         /// <param name="registerCode">The MMX register index.</param>
-        private MMXRegister(int index, int registerCode) :
-            base(index, false)
+        private MMXRegister (int index, int registerCode) : base(index, false)
         {
             _registerCode = registerCode;
         }
 
-        #endregion // Construction
+        #endregion
 
         #region Properties
 
@@ -112,7 +111,7 @@ namespace Mosa.Platforms.x86
             get { return 64; }
         }
 
-        #endregion // Properties
+        #endregion
 
         #region Methods
 
@@ -121,7 +120,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="type">The signature type to check.</param>
         /// <returns>True if the signature type fits.</returns>
-        public override bool IsValidSigType(SigType type)
+        public override bool IsValidSigType (SigType type)
         {
             return (type.Type == CilElementType.I8 || type.Type == CilElementType.U8);
         }
@@ -130,11 +129,11 @@ namespace Mosa.Platforms.x86
         /// Returns the string representation of the register.
         /// </summary>
         /// <returns>The string representation of the register.</returns>
-        public override string ToString()
+        public override string ToString ()
         {
-            return String.Format("MM{0}", _registerCode);
+            return String.Format ("MM{0}", _registerCode);
         }
 
-        #endregion // Methods
+        #endregion
     }
 }

@@ -65,51 +65,51 @@ namespace Mosa.Platforms.x86
             EDI = 7
         }
 
-        #endregion // Types
+        #endregion
 
         #region Static data members
 
         /// <summary>
         /// Represents the EAX register.
         /// </summary>
-        public static readonly GeneralPurposeRegister EAX = new GeneralPurposeRegister(0, GPR.EAX);
+        public static readonly GeneralPurposeRegister EAX = new GeneralPurposeRegister (0, GPR.EAX);
 
         /// <summary>
         /// Represents the ECX register.
         /// </summary>
-        public static readonly GeneralPurposeRegister ECX = new GeneralPurposeRegister(1, GPR.ECX);
+        public static readonly GeneralPurposeRegister ECX = new GeneralPurposeRegister (1, GPR.ECX);
 
         /// <summary>
         /// Represents the EDX register.
         /// </summary>
-        public static readonly GeneralPurposeRegister EDX = new GeneralPurposeRegister(2, GPR.EDX);
+        public static readonly GeneralPurposeRegister EDX = new GeneralPurposeRegister (2, GPR.EDX);
 
         /// <summary>
         /// Represents the EBX register.
         /// </summary>
-        public static readonly GeneralPurposeRegister EBX = new GeneralPurposeRegister(3, GPR.EBX);
+        public static readonly GeneralPurposeRegister EBX = new GeneralPurposeRegister (3, GPR.EBX);
 
         /// <summary>
         /// Represents the ESP register.
         /// </summary>
-        public static readonly GeneralPurposeRegister ESP = new GeneralPurposeRegister(4, GPR.ESP);
+        public static readonly GeneralPurposeRegister ESP = new GeneralPurposeRegister (4, GPR.ESP);
 
         /// <summary>
         /// Represents the EBP register.
         /// </summary>
-        public static readonly GeneralPurposeRegister EBP = new GeneralPurposeRegister(5, GPR.EBP);
+        public static readonly GeneralPurposeRegister EBP = new GeneralPurposeRegister (5, GPR.EBP);
 
         /// <summary>
         /// Represents the ESI register.
         /// </summary>
-        public static readonly GeneralPurposeRegister ESI = new GeneralPurposeRegister(6, GPR.ESI);
+        public static readonly GeneralPurposeRegister ESI = new GeneralPurposeRegister (6, GPR.ESI);
 
         /// <summary>
         /// Represents the EDI register.
         /// </summary>
-        public static readonly GeneralPurposeRegister EDI = new GeneralPurposeRegister(7, GPR.EDI);
+        public static readonly GeneralPurposeRegister EDI = new GeneralPurposeRegister (7, GPR.EDI);
 
-        #endregion // Static data members
+        #endregion
 
         #region Data members
 
@@ -118,7 +118,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         private readonly GPR _gpr;
 
-        #endregion // Data members
+        #endregion
 
         #region Construction
 
@@ -127,13 +127,12 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="index"></param>
         /// <param name="gpr">The general purpose register index.</param>
-        private GeneralPurposeRegister(int index, GPR gpr) :
-            base(index, gpr == GPR.EAX)
+        private GeneralPurposeRegister (int index, GPR gpr) : base(index, gpr == GPR.EAX)
         {
             _gpr = gpr;
         }
 
-        #endregion // Construction
+        #endregion
 
         #region Properties
 
@@ -161,7 +160,7 @@ namespace Mosa.Platforms.x86
             get { return 32; }
         }
 
-        #endregion // Properties
+        #endregion
 
         #region Methods
 
@@ -170,30 +169,20 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="type">The signature type to check.</param>
         /// <returns>True if the signature type fits.</returns>
-        public override bool IsValidSigType(SigType type)
+        public override bool IsValidSigType (SigType type)
         {
-            return (type.Type == CilElementType.I ||
-                    type.Type == CilElementType.I1 ||
-                    type.Type == CilElementType.I2 ||
-                    type.Type == CilElementType.I4 ||
-                    type.Type == CilElementType.U1 ||
-                    type.Type == CilElementType.U2 ||
-                    type.Type == CilElementType.U4 ||
-                    type.Type == CilElementType.Ptr ||
-                    type.Type == CilElementType.ByRef ||
-                    type.Type == CilElementType.FunctionPtr ||
-                    type.Type == CilElementType.Object);
+            return (type.Type == CilElementType.I || type.Type == CilElementType.I1 || type.Type == CilElementType.I2 || type.Type == CilElementType.I4 || type.Type == CilElementType.U1 || type.Type == CilElementType.U2 || type.Type == CilElementType.U4 || type.Type == CilElementType.Ptr || type.Type == CilElementType.ByRef || type.Type == CilElementType.FunctionPtr || type.Type == CilElementType.Object);
         }
 
         /// <summary>
         /// Returns the name of the general purpose register.
         /// </summary>
         /// <returns>The name of the general purpose register.</returns>
-        public override string ToString()
+        public override string ToString ()
         {
-            return _gpr.ToString();
+            return _gpr.ToString ();
         }
 
-        #endregion // Methods
+        #endregion
     }
 }

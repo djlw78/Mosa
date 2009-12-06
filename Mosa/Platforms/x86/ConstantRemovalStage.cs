@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -33,11 +33,11 @@ namespace Mosa.Platforms.x86
         // Check the type of the constant operand against this list of large CIL types,
         // that need special handling.
         private static CilElementType[] _largeCilTypes = {
-                CilElementType.R4,
-                CilElementType.R8,
-                //CilElementType.I8,
-                //CilElementType.U8
-            };
+            CilElementType.R4,
+            CilElementType.R8
+            //CilElementType.I8,
+            //CilElementType.U8
+        };
 
         /// <summary>
         /// If true it indicates that this compiler stage has moved at least 
@@ -45,19 +45,18 @@ namespace Mosa.Platforms.x86
         /// </summary>
         private bool _constantRemoved;
 
-        #endregion // Data members
+        #endregion
 
         #region Properties
 
         /// <summary>
         /// Gets the existance of FP constants in the instruction stream.
         /// </summary>
-        public bool ConstantRemoved
-        {
+        public bool ConstantRemoved {
             get { return _constantRemoved; }
         }
 
-        #endregion // Properties
+        #endregion
 
         #region IPipelineStage Members
 
@@ -65,36 +64,41 @@ namespace Mosa.Platforms.x86
         /// Retrieves the name of the compilation stage.
         /// </summary>
         /// <value>The name of the compilation stage.</value>
-        string IPipelineStage.Name { get { return @"X86.ConstantRemovalStage"; } }
+        string IPipelineStage.Name {
+            get { return "X86.ConstantRemovalStage"; }
+        }
 
         private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				// TODO
-			};
+            
+            // TODO
+        };
 
         /// <summary>
         /// Gets the pipeline stage order.
         /// </summary>
         /// <value>The pipeline stage order.</value>
-        PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
+        PipelineStageOrder[] IPipelineStage.PipelineStageOrder {
+            get { return _pipelineOrder; }
+        }
 
-        #endregion // IPipelineStage Members
+        #endregion
 
         #region IMethodCompilerStage Members
 
         /// <summary>
         /// Runs the specified method compiler.
         /// </summary>
-        public void Run()
+        public void Run ()
         {
-            Context ctxEpilogue = CreateContext(FindBlock(Int32.MaxValue));
-            ctxEpilogue.GotoLast();
+            Context ctxEpilogue = CreateContext (FindBlock (Int32.MaxValue));
+            ctxEpilogue.GotoLast ();
 
             // Iterate all blocks and collect locals from all blocks
             foreach (BasicBlock block in BasicBlocks)
-                ProcessInstructions(CreateContext(block), ctxEpilogue);
+                ProcessInstructions (CreateContext (block), ctxEpilogue);
         }
 
-        #endregion // IMethodCompilerStage Members
+        #endregion
 
         #region Internals
 
@@ -103,25 +107,25 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="ctx">The context.</param>
         /// <param name="ctxEpilogue">The context of the epilogue.</param>
-        private void ProcessInstructions(Context ctx, Context ctxEpilogue)
+        private void ProcessInstructions (Context ctx, Context ctxEpilogue)
         {
             // Current constant operand
             ConstantOperand co = null;
 
-            for (; !ctx.EndOfInstruction; ctx.GotoNext())
+            for (; !ctx.EndOfInstruction; ctx.GotoNext ())
             {
                 // A constant may only appear on the right side of an expression, so we ignore constants in
                 // result - there should never be one there.
                 foreach (Operand op in ctx.Operands)
                 {
                     co = op as ConstantOperand;
-                    if (co != null && IsLargeConstant(co))
+                    if (co != null && IsLargeConstant (co))
                     {
                         // Move the constant out of the code stream and place it right after the code.
-                        ctxEpilogue.AppendInstruction(CPUx86.Instruction.LiteralInstruction);
-                        ctxEpilogue.LiteralData = new IR.LiteralData(ctx.Label, co.Type, co.Value);
+                        ctxEpilogue.AppendInstruction (CPUx86.Instruction.LiteralInstruction);
+                        ctxEpilogue.LiteralData = new IR.LiteralData (ctx.Label, co.Type, co.Value);
 
-                        op.Replace(((ctxEpilogue.Instruction) as CPUx86.LiteralInstruction).CreateOperand(ctxEpilogue), InstructionSet);
+                        op.Replace (((ctxEpilogue.Instruction) as CPUx86.LiteralInstruction).CreateOperand (ctxEpilogue), InstructionSet);
 
                         _constantRemoved = true;
                     }
@@ -139,11 +143,11 @@ namespace Mosa.Platforms.x86
         /// </remarks>
         /// <param name="co">The constant operand to check.</param>
         /// <returns>True if the constant is large and needs to be moved to a literal.</returns>
-        private static bool IsLargeConstant(ConstantOperand co)
+        private static bool IsLargeConstant (ConstantOperand co)
         {
-            return (Array.IndexOf<CilElementType>(_largeCilTypes, co.Type.Type) != -1);
+            return (Array.IndexOf<CilElementType> (_largeCilTypes, co.Type.Type) != -1);
         }
 
-        #endregion // Internals
+        #endregion
     }
 }
