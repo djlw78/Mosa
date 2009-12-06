@@ -256,17 +256,17 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
             StackTypeCode result = StackTypeCode.Unknown;
             switch (_opcode) {
-            case OpCode.Add:
-                result = _addTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
-                break;
+                case OpCode.Add:
+                    result = _addTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
+                    break;
 
-            case OpCode.Sub:
-                result = _subTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
-                break;
-            default:
+                case OpCode.Sub:
+                    result = _subTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
+                    break;
+                default:
 
-                result = _operandTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
-                break;
+                    result = _operandTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
+                    break;
             }
 
             if (StackTypeCode.Unknown == result)
@@ -276,14 +276,20 @@ namespace Mosa.Runtime.CompilerFramework.CIL
             if (result != StackTypeCode.Ptr)
             {
                 resultType = Operand.SigTypeFromStackType (result);
-            } else
+            }
+
+            else
             {
                 // Copy the pointer element type
                 PtrSigType op0 = ctx.Operand1.Type as PtrSigType;
                 PtrSigType op1 = ctx.Operand2.Type as PtrSigType;
                 if (op0 != null)
-                    resultType = new PtrSigType (op0.CustomMods, op0.ElementType); else if (op1 != null)
+                    resultType = new PtrSigType (op0.CustomMods, op0.ElementType);
+                else if (op1 != null)
+                {
                     resultType = new PtrSigType (op1.CustomMods, op1.ElementType);
+                }
+
                 else
                     throw new InvalidOperationException ();
             }

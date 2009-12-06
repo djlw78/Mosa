@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -16,50 +16,43 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public sealed class CastclassInstruction : UnaryInstruction
-	{
-		#region Construction
+    /// <summary>
+    /// 
+    /// </summary>
+    public sealed class CastclassInstruction : UnaryInstruction
+    {
+        #region Construction
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CastclassInstruction"/> class.
-		/// </summary>
-		/// <param name="opcode">The opcode.</param>
-		public CastclassInstruction(OpCode opcode)
-			: base(opcode)
-		{
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CastclassInstruction"/> class.
+        /// </summary>
+        /// <param name="opcode">The opcode.</param>
+        public CastclassInstruction (OpCode opcode) : base(opcode)
+        {
+        }
 
-		#endregion // Construction
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		/// <summary>
-		/// Decodes the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
-		{
-			// Decode base classes first
-			base.Decode(ctx, decoder);
+        /// <summary>
+        /// Decodes the specified instruction.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+        public override void Decode (Context ctx, IInstructionDecoder decoder)
+        {
+            // Decode base classes first
+            base.Decode (ctx, decoder);
 
-			// Retrieve the provider token to check against
-			TokenTypes token;
-			decoder.Decode(out token);
-			throw new NotImplementedException();
-			/*
-				TypeReference targetType = MetadataTypeReference.FromToken(decoder.Metadata, token);
+            // Retrieve the provider token to check against
+            TokenTypes token;
+            decoder.Decode (out token);
+            throw new NotImplementedException ();
+        }
 
-				// Set the results of this instruction
-				ctx.Result = CreateResultOperand(targetType);
-			*/
 
-		}
+        #endregion Methods
 
-		#endregion Methods
-
-	}
+            }
 }
