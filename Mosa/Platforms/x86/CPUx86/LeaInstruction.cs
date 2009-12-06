@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2009 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -24,7 +24,7 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="emitter"></param>
-        protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+        protected override void Emit (Context ctx, MachineCodeEmitter emitter)
         {
             RegisterOperand rop = (RegisterOperand)ctx.Result;
             MemoryOperand mop = (MemoryOperand)ctx.Operand1;
@@ -32,17 +32,22 @@ namespace Mosa.Platforms.x86.CPUx86
 
             if (null != mop.Base)
             {
-                code = new byte[] { 0x8D, 0x84, (4 << 3) };
-                code[1] |= (byte)((rop.Register.RegisterCode & 0x07));
-                code[2] |= (byte)((mop.Base.RegisterCode & 0x07));
-            }
-            else
-            {
-                code = new byte[] { 0xB8 };
+                code = new byte[] {
+                    0x8d,
+                    0x84,
+                    (4 << 3)
+                };
+                code[1] |= (byte)((rop.Register.RegisterCode & 0x7));
+                code[2] |= (byte)((mop.Base.RegisterCode & 0x7));
             }
 
-            emitter.Write(code, 0, code.Length);
-            emitter.EmitImmediate(mop);
+            else
+            {
+                code = new byte[] { 0xb8 };
+            }
+
+            emitter.Write (code, 0, code.Length);
+            emitter.EmitImmediate (mop);
         }
 
         /// <summary>
@@ -50,12 +55,12 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </summary>
         /// <param name="visitor">The visitor object.</param>
         /// <param name="context">The context.</param>
-        public override void Visit(IX86Visitor visitor, Context context)
+        public override void Visit (IX86Visitor visitor, Context context)
         {
-            visitor.Lea(context);
+            visitor.Lea (context);
         }
 
-        #endregion // Methods
+        #endregion
 
     }
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -23,9 +23,9 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </summary>
         /// <param name="ctx"></param>
         /// <param name="emitter"></param>
-        protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+        protected override void Emit (Context ctx, MachineCodeEmitter emitter)
         {
-            emitter.WriteByte(0xCC);
+            emitter.WriteByte (0xcc);
         }
 
         /// <summary>
@@ -33,11 +33,11 @@ namespace Mosa.Platforms.x86.CPUx86
         /// </summary>
         /// <param name="visitor">The visitor object.</param>
         /// <param name="context">The context.</param>
-        public override void Visit(IX86Visitor visitor, Context context)
+        public override void Visit (IX86Visitor visitor, Context context)
         {
-            visitor.Int(context);
+            visitor.Int (context);
         }
 
-        #endregion // Methods
+        #endregion
     }
 }

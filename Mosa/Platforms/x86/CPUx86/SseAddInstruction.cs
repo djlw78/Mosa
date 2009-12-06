@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -23,22 +23,33 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class SseAddInstruction : TwoOperandInstruction
     {
-		#region Data Members
+        #region Data Members
 
-        private static readonly OpCode R4 = new OpCode(new byte[] { 0xF3, 0x0F, 0x58 });
-		private static readonly OpCode R8 = new OpCode(new byte[] { 0xF2, 0x0F, 0x58 });
+        private static readonly OpCode R4 = new OpCode (new byte[] {
+            0xf3,
+            0xf,
+            0x58
+        });
+        private static readonly OpCode R8 = new OpCode (new byte[] {
+            0xf2,
+            0xf,
+            0x58
+        });
 
-		#endregion // Data Members
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// Gets the instruction latency.
-		/// </summary>
-		/// <value>The latency.</value>
-		public override int Latency { get { return 3; } }
+        /// <summary>
+        /// Gets the instruction latency.
+        /// </summary>
+        /// <value>The latency.</value>
+        public override int Latency
+        {
+            get { return 3; }
+        }
 
-		#endregion // Properties
+        #endregion
 
         #region Methods
         /// <summary>
@@ -48,23 +59,23 @@ namespace Mosa.Platforms.x86.CPUx86
         /// <param name="source"></param>
         /// <param name="third"></param>
         /// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+        protected override OpCode ComputeOpCode (Operand destination, Operand source, Operand third)
         {
             if (source.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
                 return R4;
-			return R8;
+            return R8;
         }
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor object.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IX86Visitor visitor, Context context)
-		{
-			visitor.SseAdd(context);
-		}
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="context">The context.</param>
+        public override void Visit (IX86Visitor visitor, Context context)
+        {
+            visitor.SseAdd (context);
+        }
 
-		#endregion
+        #endregion
 
-	}
+    }
 }

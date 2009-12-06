@@ -22,28 +22,28 @@ namespace Mosa.Platforms.x86.CPUx86
     /// </summary>
     public sealed class CpuIdInstruction : TwoOperandInstruction, IIntrinsicInstruction
     {
- 
+
         #region Methods
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor object.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IX86Visitor visitor, Context context)
-		{
-			visitor.CpuId(context);
-		}
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="context">The context.</param>
+        public override void Visit (IX86Visitor visitor, Context context)
+        {
+            visitor.CpuId (context);
+        }
 
-		/// <summary>
-		/// Replaces the instrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context)
-		{
-			context.SetInstruction(CPUx86.Instruction.CpuIdInstruction, context.Result, context.Operand1);
-		}
+        /// <summary>
+        /// Replaces the instrinsic call site
+        /// </summary>
+        /// <param name="context">The context.</param>
+        public void ReplaceIntrinsicCall (Context context)
+        {
+            context.SetInstruction (CPUx86.Instruction.CpuIdInstruction, context.Result, context.Operand1);
+        }
 
-        #endregion // Methods
+        #endregion
     }
 }

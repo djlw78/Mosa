@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -18,57 +18,66 @@ using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-	/// <summary>
-	/// Representations the x86 int instruction.
-	/// </summary>
-	public sealed class IncInstruction : OneOperandInstruction
-	{
-		#region Data Members
+    /// <summary>
+    /// Representations the x86 int instruction.
+    /// </summary>
+    public sealed class IncInstruction : OneOperandInstruction
+    {
+        #region Data Members
 
-		private static readonly OpCode Inc_8 = new OpCode(new byte[] { 0xFE }, 0);
-        private static readonly OpCode Inc_16 = new OpCode(new byte[] { 0x66, 0xFF }, 0);
-        private static readonly OpCode Inc_32 = new OpCode(new byte[] { 0xFF }, 0);
+        private static readonly OpCode Inc_8 = new OpCode (new byte[] { 0xfe }, 0);
+        private static readonly OpCode Inc_16 = new OpCode (new byte[] {
+            0x66,
+            0xff
+        }, 0);
+        private static readonly OpCode Inc_32 = new OpCode (new byte[] { 0xff }, 0);
 
-		#endregion // Data Members
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// Gets the instruction latency.
-		/// </summary>
-		/// <value>The latency.</value>
-		public override int Latency { get { return 1; } }
+        /// <summary>
+        /// Gets the instruction latency.
+        /// </summary>
+        /// <value>The latency.</value>
+        public override int Latency
+        {
+            get { return 1; }
+        }
 
-		#endregion // Properties
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		/// <summary>
-		/// Computes the opcode.
-		/// </summary>
-		/// <param name="destination">The destination operand.</param>
-		/// <param name="source">The source operand.</param>
-		/// <param name="third">The third operand.</param>
-		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-		{
-			if (IsByte(destination)) return Inc_8;
-			if (IsShort(destination) || IsChar(destination)) return Inc_16;
-			if (IsInt(destination)) return Inc_32;
+        /// <summary>
+        /// Computes the opcode.
+        /// </summary>
+        /// <param name="destination">The destination operand.</param>
+        /// <param name="source">The source operand.</param>
+        /// <param name="third">The third operand.</param>
+        /// <returns></returns>
+        protected override OpCode ComputeOpCode (Operand destination, Operand source, Operand third)
+        {
+            if (IsByte (destination))
+                return Inc_8;
+            if (IsShort (destination) || IsChar (destination))
+                return Inc_16;
+            if (IsInt (destination))
+                return Inc_32;
 
-			throw new ArgumentException(@"No opcode for operand type.");
-		}
+            throw new ArgumentException ("No opcode for operand type.");
+        }
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor object.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(IX86Visitor visitor, Context context)
-		{
-			visitor.Inc(context);
-		}
+        /// <summary>
+        /// Allows visitor based dispatch for this instruction object.
+        /// </summary>
+        /// <param name="visitor">The visitor object.</param>
+        /// <param name="context">The context.</param>
+        public override void Visit (IX86Visitor visitor, Context context)
+        {
+            visitor.Inc (context);
+        }
 
-		#endregion // Methods
-	}
+        #endregion
+    }
 }

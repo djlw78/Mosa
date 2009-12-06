@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -15,60 +15,60 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public static class Intrinsics
-	{
-		#region Static Data
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class Intrinsics
+    {
+        #region Static Data
 
-		private static Dictionary<Type, IIntrinsicInstruction> _map = null; 
+        private static Dictionary<Type, IIntrinsicInstruction> _map = null;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public static readonly BochsDebug BochsDebug = new BochsDebug();
-		
-		#endregion // Static Data 
-		
-		/// <summary>
-		/// Gets the instruction.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public static IIntrinsicInstruction Get(Type type)
-		{
-			if (_map == null)
-				_map = Initialize();
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly BochsDebug BochsDebug = new BochsDebug ();
 
-			return _map[type];
-		}
+        #endregion
 
-		/// <summary>
-		/// Initializes this instance.
-		/// </summary>
-		/// <returns></returns>
-		public static Dictionary<Type, IIntrinsicInstruction> Initialize()
-		{
-			Dictionary<Type, IIntrinsicInstruction> map = new Dictionary<Type, IIntrinsicInstruction>();
+        /// <summary>
+        /// Gets the instruction.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        public static IIntrinsicInstruction Get (Type type)
+        {
+            if (_map == null)
+                _map = Initialize ();
 
-			map.Add(typeof(BochsDebug), BochsDebug);
-			map.Add(typeof(OutInstruction), CPUx86.Instruction.OutInstruction);
-			map.Add(typeof(InInstruction), CPUx86.Instruction.InInstruction);
-			map.Add(typeof(CpuIdEaxInstruction), CPUx86.Instruction.CpuIdEaxInstruction);
-			map.Add(typeof(CpuIdEbxInstruction), CPUx86.Instruction.CpuIdEbxInstruction);
-			map.Add(typeof(CpuIdEcxInstruction), CPUx86.Instruction.CpuIdEcxInstruction);
-			map.Add(typeof(CpuIdEdxInstruction), CPUx86.Instruction.CpuIdEdxInstruction);
-			map.Add(typeof(CpuIdInstruction), CPUx86.Instruction.CpuIdInstruction);
-			map.Add(typeof(InvlpgInstruction), CPUx86.Instruction.InvlpgInstruction);
-			map.Add(typeof(NopInstruction), CPUx86.Instruction.NopInstruction);
-            map.Add(typeof(MovInstruction), CPUx86.Instruction.MovInstruction);
+            return _map[type];
+        }
 
-			// TODO - finish up the list
+        /// <summary>
+        /// Initializes this instance.
+        /// </summary>
+        /// <returns></returns>
+        public static Dictionary<Type, IIntrinsicInstruction> Initialize ()
+        {
+            Dictionary<Type, IIntrinsicInstruction> map = new Dictionary<Type, IIntrinsicInstruction> ();
 
-			return map;
-		}
+            map.Add (typeof(BochsDebug), BochsDebug);
+            map.Add (typeof(OutInstruction), CPUx86.Instruction.OutInstruction);
+            map.Add (typeof(InInstruction), CPUx86.Instruction.InInstruction);
+            map.Add (typeof(CpuIdEaxInstruction), CPUx86.Instruction.CpuIdEaxInstruction);
+            map.Add (typeof(CpuIdEbxInstruction), CPUx86.Instruction.CpuIdEbxInstruction);
+            map.Add (typeof(CpuIdEcxInstruction), CPUx86.Instruction.CpuIdEcxInstruction);
+            map.Add (typeof(CpuIdEdxInstruction), CPUx86.Instruction.CpuIdEdxInstruction);
+            map.Add (typeof(CpuIdInstruction), CPUx86.Instruction.CpuIdInstruction);
+            map.Add (typeof(InvlpgInstruction), CPUx86.Instruction.InvlpgInstruction);
+            map.Add (typeof(NopInstruction), CPUx86.Instruction.NopInstruction);
+            map.Add (typeof(MovInstruction), CPUx86.Instruction.MovInstruction);
 
-	}
+            // TODO - finish up the list
+
+            return map;
+        }
+
+    }
 }
 
