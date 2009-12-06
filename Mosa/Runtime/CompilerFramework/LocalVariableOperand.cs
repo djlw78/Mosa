@@ -23,40 +23,39 @@ namespace Mosa.Runtime.CompilerFramework
     /// </remarks>
     public class LocalVariableOperand : StackOperand
     {
-		#region Data members
+        #region Data members
 
-		/// <summary>
-		/// The name of the variable.
-		/// </summary>
-		private string _name;
+        /// <summary>
+        /// The name of the variable.
+        /// </summary>
+        private string _name;
 
-		#endregion // Data members
+        #endregion
 
-		#region Construction
+        #region Construction
 
-		/// <summary>
-		/// Initializes an instance of <see cref="LocalVariableOperand"/>.
-		/// </summary>
+        /// <summary>
+        /// Initializes an instance of <see cref="LocalVariableOperand"/>.
+        /// </summary>
         /// <param name="register">Holds the stack frame register.</param>
-		/// <param name="name">The name of the variable.</param>
+        /// <param name="name">The name of the variable.</param>
         /// <param name="index">Holds the variable index.</param>
-		/// <param name="type">The type of the variable.</param>
-		public LocalVariableOperand(Register register, string name, int index, SigType type)
-			: base(type, register, -index) // HACK: Redo this with Architecture support!
-		{
-			_name = name;
-		}
+        /// <param name="type">The type of the variable.</param>
+        // HACK: Redo this with Architecture support!
+        public LocalVariableOperand (Register register, string name, int index, SigType type) : base(type, register, -index)
+        {
+            _name = name;
+        }
 
-		#endregion // Construction
+        #endregion
 
 
-		#region StackOperand overrides
+        #region StackOperand overrides
 
         /// <summary>
         /// Returns the name of the variable if it is available.
         /// </summary>
-        public override string Name
-        {
+        public override string Name {
             get { return _name; }
         }
 
@@ -64,11 +63,11 @@ namespace Mosa.Runtime.CompilerFramework
         /// Clones the stack operand.
         /// </summary>
         /// <returns></returns>
-        public override object Clone()
+        public override object Clone ()
         {
-            return new LocalVariableOperand(Base, _name, -(Offset.ToInt32()/4), Type);
+            return new LocalVariableOperand (Base, _name, -(Offset.ToInt32 () / 4), Type);
         }
 
-        #endregion // StackOperand overrides
+        #endregion
     }
 }

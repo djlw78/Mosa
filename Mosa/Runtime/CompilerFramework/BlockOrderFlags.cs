@@ -16,17 +16,17 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// 
     /// </summary>
-    [Flags]
+    [Flags()]
     public enum BlockOrderFlags
     {
         /// <summary>
         /// 
         /// </summary>
-        Active = 0x01,
+        Active = 0x1,
 
         /// <summary>
         /// 
         /// </summary>
-        Visited = 0x02,
+        Visited = 0x2
     }
 }

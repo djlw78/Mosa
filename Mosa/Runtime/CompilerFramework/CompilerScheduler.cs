@@ -29,12 +29,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Used to synchronize access to the queue.
         /// </summary>
-        private static object _syncObject = new object();
+        private static object _syncObject = new object ();
 
         /// <summary>
         /// Used to queue work 
         /// </summary>
-        private static Queue<MethodCompilerBase> _compilerQueue = new Queue<MethodCompilerBase>();
+        private static Queue<MethodCompilerBase> _compilerQueue = new Queue<MethodCompilerBase> ();
 
         /// <summary>
         /// Compilation thread queue.
@@ -46,31 +46,34 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         private static ManualResetEvent _abort = null;
 
-        #endregion // Data members
+        #endregion
 
         #region Methods
 
         /// <summary>
         /// Compilations the thread proc.
         /// </summary>
-        private static void CompilationThreadProc()
+        private static void CompilationThreadProc ()
         {
             MethodCompilerBase compiler = null;
-            WaitHandle[] waitHandles = new WaitHandle[] { _compilerPending, _abort };
-            while (0 == WaitHandle.WaitAny(waitHandles))
+            WaitHandle[] waitHandles = new WaitHandle[] {
+                _compilerPending,
+                _abort
+            };
+            while (0 == WaitHandle.WaitAny (waitHandles))
             {
                 lock (_syncObject)
                 {
                     if (0 != _compilerQueue.Count)
                     {
-                        compiler = _compilerQueue.Dequeue();
+                        compiler = _compilerQueue.Dequeue ();
                     }
                 }
 
                 if (null != compiler)
                 {
-                    Debug.WriteLine("Compiling " + compiler.Method);
-                    compiler.Compile();
+                    Debug.WriteLine ("Compiling " + compiler.Method);
+                    compiler.Compile ();
                     compiler = null;
                 }
             }
@@ -80,17 +83,17 @@ namespace Mosa.Runtime.CompilerFramework
         /// Schedules the specified compiler.
         /// </summary>
         /// <param name="compiler">The compiler.</param>
-        public static void Schedule(MethodCompilerBase compiler)
+        public static void Schedule (MethodCompilerBase compiler)
         {
             if (null == compiler)
-                throw new ArgumentNullException(@"compiler");
+                throw new ArgumentNullException ("compiler");
             if (null == _compilerPending)
-                Setup(1);
+                Setup (1);
 
             lock (_syncObject)
             {
-                _compilerQueue.Enqueue(compiler);
-                _compilerPending.Set();
+                _compilerQueue.Enqueue (compiler);
+                _compilerPending.Set ();
             }
         }
 
@@ -98,17 +101,17 @@ namespace Mosa.Runtime.CompilerFramework
         /// Setups the specified threads.
         /// </summary>
         /// <param name="threads">The threads.</param>
-        public static void Setup(int threads)
+        public static void Setup (int threads)
         {
             lock (_syncObject)
             {
-                _compilerPending = new AutoResetEvent(false);
-                _abort = new ManualResetEvent(false);
+                _compilerPending = new AutoResetEvent (false);
+                _abort = new ManualResetEvent (false);
 
                 for (int i = 0; i < threads; i++)
                 {
-                    Thread compilationThread = new Thread(new ThreadStart(CompilerScheduler.CompilationThreadProc));
-                    compilationThread.Start();
+                    Thread compilationThread = new Thread (new ThreadStart (CompilerScheduler.CompilationThreadProc));
+                    compilationThread.Start ();
                 }
             }
         }
@@ -116,14 +119,14 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// Waits this instance.
         /// </summary>
-        public static void Wait()
+        public static void Wait ()
         {
             while (0 != _compilerQueue.Count)
-                Thread.Sleep(1000);
+                Thread.Sleep (1000);
 
-            _abort.Set();
+            _abort.Set ();
         }
 
-        #endregion // Methods
+        #endregion
     }
 }

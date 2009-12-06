@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// Provides compiler support functions.
     /// </summary>
-    [InternalCallType]
+    [InternalCallType()]
     public static class CompilerSupport
     {
         /// <summary>
@@ -29,7 +29,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="value">The value.</param>
         /// <param name="count">The number of bytes to fill.</param>
         [VmCall(VmCall.Memset)]
-        public unsafe static void Memset(byte* destination, byte value, int count)
+        unsafe public static void Memset (byte* destination, byte value, int count)
         {
         }
 
@@ -40,7 +40,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="source">The source.</param>
         /// <param name="count">The number of bytes to copy.</param>
         [VmCall(VmCall.Memset)]
-        public unsafe static void Memcpy(byte* destination, byte* source, int count)
+        unsafe public static void Memcpy (byte* destination, byte* source, int count)
         {
             for (int i = 0; i < count; ++i)
                 *destination++ = *source++;

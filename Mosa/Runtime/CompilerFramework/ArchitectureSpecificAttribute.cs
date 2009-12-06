@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// Adding this attribute will exclude the language element From compilation, 
     /// if it the compilation architecture does not match the named architecture type.
     /// </remarks>
-    [AttributeUsage(AttributeTargets.Class|AttributeTargets.Struct|AttributeTargets.Method|AttributeTargets.Property|AttributeTargets.Field|AttributeTargets.Enum|AttributeTargets.Delegate|AttributeTargets.Constructor|AttributeTargets.Assembly|AttributeTargets.Event|AttributeTargets.Interface|AttributeTargets.Module)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Enum | AttributeTargets.Delegate | AttributeTargets.Constructor | AttributeTargets.Assembly | AttributeTargets.Event | AttributeTargets.Interface | AttributeTargets.Module)]
     public sealed class ArchitectureSpecificAttribute : Attribute
     {
         #region Data members
@@ -28,7 +28,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         private string _architecture;
 
-        #endregion // Data members
+        #endregion
 
         #region Construction
 
@@ -36,39 +36,37 @@ namespace Mosa.Runtime.CompilerFramework
         /// Initializes a new instance of <see cref="ArchitectureSpecificAttribute"/>.
         /// </summary>
         /// <param name="architecture">The name of the architecture.</param>
-        public ArchitectureSpecificAttribute(string architecture)
+        public ArchitectureSpecificAttribute (string architecture)
         {
             if (null == architecture)
-                throw new ArgumentNullException(@"architecture");
+                throw new ArgumentNullException ("architecture");
             if (0 == architecture.Length)
-                throw new ArgumentException(@"Must supply an architecture name.", @"architecture");
+                throw new ArgumentException ("Must supply an architecture name.", "architecture");
 
             _architecture = architecture;
         }
 
-        #endregion // Construction
+        #endregion
 
         #region Properties
 
         /// <summary>
         /// Gets or sets the name of the architecture.
         /// </summary>
-        public string Architecture
-        {
+        public string Architecture {
             get { return _architecture; }
-            set
-            {
+            set {
                 if (null == value)
-                    throw new ArgumentNullException(@"value");
+                    throw new ArgumentNullException ("value");
                 if (0 == value.Length)
-                    throw new ArgumentException(@"Must supply an architecture name.", @"value");
+                    throw new ArgumentException ("Must supply an architecture name.", "value");
                 if (null != _architecture)
-                    throw new InvalidOperationException(@"Can't change the architecture dynamically.");
+                    throw new InvalidOperationException ("Can't change the architecture dynamically.");
 
                 _architecture = value;
             }
         }
 
-        #endregion // Properties
+        #endregion
     }
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -24,7 +24,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         private CompilerSupportFunction supportFunction;
 
-        #endregion // Data members
+        #endregion
 
         #region Construction
 
@@ -32,12 +32,12 @@ namespace Mosa.Runtime.CompilerFramework
         /// Initializes a new instance of the <see cref="CompilerSupportAttribute"/> class.
         /// </summary>
         /// <param name="supportFunction">The call target.</param>
-        public CompilerSupportAttribute(CompilerSupportFunction supportFunction)
+        public CompilerSupportAttribute (CompilerSupportFunction supportFunction)
         {
             this.supportFunction = supportFunction;
         }
 
-        #endregion // Construction
+        #endregion
 
         #region Properties
 
@@ -45,12 +45,11 @@ namespace Mosa.Runtime.CompilerFramework
         /// Gets the call target.
         /// </summary>
         /// <value>The call target.</value>
-        public CompilerSupportFunction SupportFunction
-        {
+        public CompilerSupportFunction SupportFunction {
             get { return supportFunction; }
         }
 
-        #endregion // Properties
+        #endregion
 
         #region InternalCallImplAttribute Overrides
 
@@ -59,14 +58,14 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="call">The call attribute.</param>
         /// <returns>
-        /// 	<c>true</c> if they match; otherwise <c>false</c>.
+        ///     <c>true</c> if they match; otherwise <c>false</c>.
         /// </returns>
-        public override bool Match(Vm.InternalCallImplAttribute call)
+        public override bool Match (Vm.InternalCallImplAttribute call)
         {
             CompilerSupportAttribute csa = call as CompilerSupportAttribute;
             return (null != csa && csa.SupportFunction == supportFunction);
         }
 
-        #endregion // InternalCallImplAttribute Overrides
+        #endregion
     }
 }

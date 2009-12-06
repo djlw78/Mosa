@@ -17,27 +17,27 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// The instruction always continues execution on the next instruction.
         /// </summary>
-        Next = 0x00,
+        Next = 0x0,
 
         /// <summary>
         /// The instruction invokes another method.
         /// </summary>
-        Call = 0x01,
+        Call = 0x1,
 
         /// <summary>
         /// The instruction is an unconditional branch.
         /// </summary>
-        Branch = 0x02,
-        
+        Branch = 0x2,
+
         /// <summary>
         /// The instruction is a conditional branch, which never falls through.
         /// </summary>
-        ConditionalBranch = 0x04,
+        ConditionalBranch = 0x4,
 
         /// <summary>
         /// The instruction is a conditional branch, which may fall-through.
         /// </summary>
-        Switch = 0x08,
+        Switch = 0x8,
 
         /// <summary>
         /// The instruction breaks the control-flow.
@@ -52,6 +52,6 @@ namespace Mosa.Runtime.CompilerFramework
         /// <summary>
         /// The instruction throws an exception.
         /// </summary>
-        Throw = 0x40,
+        Throw = 0x40
     }
 }

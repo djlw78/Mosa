@@ -43,7 +43,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         protected List<BasicBlock> BasicBlocks;
 
-        #endregion // Data members
+        #endregion
 
         #region IMethodCompilerStage members
 
@@ -51,10 +51,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// Setups the specified compiler.
         /// </summary>
         /// <param name="compiler">The compiler.</param>
-        public void Setup(IMethodCompiler compiler)
+        public void Setup (IMethodCompiler compiler)
         {
             if (compiler == null)
-                throw new ArgumentNullException(@"compiler");
+                throw new ArgumentNullException ("compiler");
 
             MethodCompiler = compiler;
             InstructionSet = compiler.InstructionSet;
@@ -71,9 +71,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="label">The label.</param>
         /// <returns></returns>
-        protected BasicBlock FindBlock(int label)
+        protected BasicBlock FindBlock (int label)
         {
-            return MethodCompiler.FromLabel(label);
+            return MethodCompiler.FromLabel (label);
         }
 
         /// <summary>
@@ -81,9 +81,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="block">The block.</param>
         /// <returns></returns>
-        protected Context CreateContext(BasicBlock block)
+        protected Context CreateContext (BasicBlock block)
         {
-            return new Context(InstructionSet, block);
+            return new Context (InstructionSet, block);
         }
 
         /// <summary>
@@ -91,9 +91,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        protected Context CreateContext(int index)
+        protected Context CreateContext (int index)
         {
-            return new Context(InstructionSet, index);
+            return new Context (InstructionSet, index);
         }
 
         /// <summary>
@@ -102,11 +102,11 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="label">The label.</param>
         /// <param name="index">The index.</param>
         /// <returns></returns>
-        protected BasicBlock CreateBlock(int label, int index)
+        protected BasicBlock CreateBlock (int label, int index)
         {
             // HACK: BasicBlock.Count for the sequence works for now since blocks are not removed
-            BasicBlock basicBlock = new BasicBlock(BasicBlocks.Count, label, index);
-            BasicBlocks.Add(basicBlock);
+            BasicBlock basicBlock = new BasicBlock (BasicBlocks.Count, label, index);
+            BasicBlocks.Add (basicBlock);
             return basicBlock;
         }
 
@@ -115,9 +115,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="label">The label.</param>
         /// <returns></returns>
-        protected BasicBlock CreateBlock(int label)
+        protected BasicBlock CreateBlock (int label)
         {
-            return CreateBlock(label, -1);
+            return CreateBlock (label, -1);
         }
 
         #endregion
@@ -129,21 +129,31 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="conditionCode">The condition code to get an unsigned form from.</param>
         /// <returns>The unsigned form of the given condition code.</returns>
-        protected IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
+        protected IR.ConditionCode GetUnsignedConditionCode (IR.ConditionCode conditionCode)
         {
-            switch (conditionCode)
-            {
-                case IR.ConditionCode.Equal: break;
-                case IR.ConditionCode.NotEqual: break;
-                case IR.ConditionCode.GreaterOrEqual: return IR.ConditionCode.UnsignedGreaterOrEqual;
-                case IR.ConditionCode.GreaterThan: return IR.ConditionCode.UnsignedGreaterThan;
-                case IR.ConditionCode.LessOrEqual: return IR.ConditionCode.UnsignedLessOrEqual;
-                case IR.ConditionCode.LessThan: return IR.ConditionCode.UnsignedLessThan;
-                case IR.ConditionCode.UnsignedGreaterOrEqual: break;
-                case IR.ConditionCode.UnsignedGreaterThan: break;
-                case IR.ConditionCode.UnsignedLessOrEqual: break;
-                case IR.ConditionCode.UnsignedLessThan: break;
-                default: throw new NotSupportedException();
+            switch (conditionCode) {
+            case IR.ConditionCode.Equal:
+                break;
+            case IR.ConditionCode.NotEqual:
+                break;
+            case IR.ConditionCode.GreaterOrEqual:
+                return IR.ConditionCode.UnsignedGreaterOrEqual;
+            case IR.ConditionCode.GreaterThan:
+                return IR.ConditionCode.UnsignedGreaterThan;
+            case IR.ConditionCode.LessOrEqual:
+                return IR.ConditionCode.UnsignedLessOrEqual;
+            case IR.ConditionCode.LessThan:
+                return IR.ConditionCode.UnsignedLessThan;
+            case IR.ConditionCode.UnsignedGreaterOrEqual:
+                break;
+            case IR.ConditionCode.UnsignedGreaterThan:
+                break;
+            case IR.ConditionCode.UnsignedLessOrEqual:
+                break;
+            case IR.ConditionCode.UnsignedLessThan:
+                break;
+            default:
+                throw new NotSupportedException ();
             }
 
             return conditionCode;
@@ -154,27 +164,39 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="conditionCode">The condition code.</param>
         /// <returns></returns>
-        protected IR.ConditionCode GetOppositeConditionCode(IR.ConditionCode conditionCode)
+        protected IR.ConditionCode GetOppositeConditionCode (IR.ConditionCode conditionCode)
         {
-            switch (conditionCode)
-            {
-                case IR.ConditionCode.Equal: return IR.ConditionCode.NotEqual;
-                case IR.ConditionCode.NotEqual: return IR.ConditionCode.Equal;
-                case IR.ConditionCode.GreaterOrEqual: return IR.ConditionCode.LessThan;
-                case IR.ConditionCode.GreaterThan: return IR.ConditionCode.LessOrEqual;
-                case IR.ConditionCode.LessOrEqual: return IR.ConditionCode.UnsignedLessOrEqual;
-                case IR.ConditionCode.LessThan: return IR.ConditionCode.GreaterOrEqual;
-                case IR.ConditionCode.UnsignedGreaterOrEqual: return IR.ConditionCode.UnsignedLessThan;
-                case IR.ConditionCode.UnsignedGreaterThan: return IR.ConditionCode.UnsignedLessOrEqual;
-                case IR.ConditionCode.UnsignedLessOrEqual: return IR.ConditionCode.UnsignedGreaterThan;
-                case IR.ConditionCode.UnsignedLessThan: return IR.ConditionCode.UnsignedGreaterOrEqual;
-                case IR.ConditionCode.Signed: return IR.ConditionCode.NotSigned;
-                case IR.ConditionCode.NotSigned: return IR.ConditionCode.Signed;
-                default: throw new NotSupportedException();
+            switch (conditionCode) {
+            case IR.ConditionCode.Equal:
+                return IR.ConditionCode.NotEqual;
+            case IR.ConditionCode.NotEqual:
+                return IR.ConditionCode.Equal;
+            case IR.ConditionCode.GreaterOrEqual:
+                return IR.ConditionCode.LessThan;
+            case IR.ConditionCode.GreaterThan:
+                return IR.ConditionCode.LessOrEqual;
+            case IR.ConditionCode.LessOrEqual:
+                return IR.ConditionCode.UnsignedLessOrEqual;
+            case IR.ConditionCode.LessThan:
+                return IR.ConditionCode.GreaterOrEqual;
+            case IR.ConditionCode.UnsignedGreaterOrEqual:
+                return IR.ConditionCode.UnsignedLessThan;
+            case IR.ConditionCode.UnsignedGreaterThan:
+                return IR.ConditionCode.UnsignedLessOrEqual;
+            case IR.ConditionCode.UnsignedLessOrEqual:
+                return IR.ConditionCode.UnsignedGreaterThan;
+            case IR.ConditionCode.UnsignedLessThan:
+                return IR.ConditionCode.UnsignedGreaterOrEqual;
+            case IR.ConditionCode.Signed:
+                return IR.ConditionCode.NotSigned;
+            case IR.ConditionCode.NotSigned:
+                return IR.ConditionCode.Signed;
+            default:
+                throw new NotSupportedException ();
             }
 
         }
-        #endregion // Utility Methods
+        #endregion
 
     }
 }

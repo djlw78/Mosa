@@ -1,4 +1,4 @@
-﻿namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework
 {
     /// <summary>
     /// Dummy marker interface

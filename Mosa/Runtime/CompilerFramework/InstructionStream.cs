@@ -10,85 +10,89 @@
 using System;
 using System.IO;
 
-namespace Mosa.Runtime.CompilerFramework {
+namespace Mosa.Runtime.CompilerFramework
+{
     /// <summary>
     /// 
     /// </summary>
-	public sealed class InstructionStream : Stream {
+    public sealed class InstructionStream : Stream
+    {
 
-		#region Types
-
-        /// <summary>
-        /// 
-        /// </summary>
-		[Flags]
-		enum MethodFlags : ushort {
-            /// <summary>
-            /// 
-            /// </summary>
-			TinyFormat = 0x02,
-            /// <summary>
-            /// 
-            /// </summary>
-			FatFormat = 0x03,
-            /// <summary>
-            /// 
-            /// </summary>
-			MoreSections = 0x08,
-            /// <summary>
-            /// 
-            /// </summary>
-			InitLocals = 0x10,
-            /// <summary>
-            /// 
-            /// </summary>
-			CodeSizeMask = 0xF000,
-            /// <summary>
-            /// 
-            /// </summary>
-			HeaderMask = 0x0003
-		}
+        #region Types
 
         /// <summary>
         /// 
         /// </summary>
-		[Flags]
-		enum MethodDataSectionType {
+        [Flags()]
+        enum MethodFlags : ushort
+        {
             /// <summary>
             /// 
             /// </summary>
-			EHTable = 0x01,
+            TinyFormat = 0x2,
             /// <summary>
             /// 
             /// </summary>
-			OptIL = 0x02,
+            FatFormat = 0x3,
             /// <summary>
             /// 
             /// </summary>
-			FatFormat = 0x40,
+            MoreSections = 0x8,
             /// <summary>
             /// 
             /// </summary>
-			MoreSections = 0x80
-		}
+            InitLocals = 0x10,
+            /// <summary>
+            /// 
+            /// </summary>
+            CodeSizeMask = 0xf000,
+            /// <summary>
+            /// 
+            /// </summary>
+            HeaderMask = 0x3
+        }
 
-		#endregion // Types
+        /// <summary>
+        /// 
+        /// </summary>
+        [Flags()]
+        enum MethodDataSectionType
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            EHTable = 0x1,
+            /// <summary>
+            /// 
+            /// </summary>
+            OptIL = 0x2,
+            /// <summary>
+            /// 
+            /// </summary>
+            FatFormat = 0x40,
+            /// <summary>
+            /// 
+            /// </summary>
+            MoreSections = 0x80
+        }
 
-		#region Data members
+        #endregion
 
-		/// <summary>
-		/// The CIL stream offset.
-		/// </summary>
-		private long _startOffset;
+        #region Data members
 
-		/// <summary>
-		/// Stream, which holds the il code to decode.
-		/// </summary>
-		private Stream _stream;
+        /// <summary>
+        /// The CIL stream offset.
+        /// </summary>
+        private long _startOffset;
 
-		#endregion // Data members
+        /// <summary>
+        /// Stream, which holds the il code to decode.
+        /// </summary>
+        private Stream _stream;
 
-		#region Construction
+        #endregion
+
+        #region Construction
 
 
         /// <summary>
@@ -96,21 +100,21 @@ namespace Mosa.Runtime.CompilerFramework {
         /// </summary>
         /// <param name="assemblyStream">The stream, which represents the IL assembly.</param>
         /// <param name="offset">The offset, where the IL stream starts.</param>
-		public InstructionStream(Stream assemblyStream, long offset)
-		{
-			// Check preconditions
-			if (null == assemblyStream)
-				throw new ArgumentNullException(@"assembly");
+        public InstructionStream (Stream assemblyStream, long offset)
+        {
+            // Check preconditions
+            if (null == assemblyStream)
+                throw new ArgumentNullException ("assembly");
 
-			// Store the arguments
-			_stream = assemblyStream;
-			_startOffset = offset;
-			_stream.Position = offset;
-		}
+            // Store the arguments
+            _stream = assemblyStream;
+            _startOffset = offset;
+            _stream.Position = offset;
+        }
 
-		#endregion // Construction
+        #endregion
 
-		#region Stream Overrides
+        #region Stream Overrides
 
         /// <summary>
         /// Ruft beim Überschreiben in einer abgeleiteten Klasse einen Wert ab, der angibt, ob der aktuelle Stream Lesevorgänge unterstützt.
@@ -119,10 +123,9 @@ namespace Mosa.Runtime.CompilerFramework {
         /// <returns>
         /// true, wenn der Stream Lesevorgänge unterstützt, andernfalls false.
         /// </returns>
-		public override bool CanRead
-		{
-			get { return true; }
-		}
+        public override bool CanRead {
+            get { return true; }
+        }
 
         /// <summary>
         /// Ruft beim Überschreiben in einer abgeleiteten Klasse einen Wert ab, der angibt, ob der aktuelle Stream Suchvorgänge unterstützt.
@@ -131,10 +134,9 @@ namespace Mosa.Runtime.CompilerFramework {
         /// <returns>
         /// true, wenn der Stream Suchvorgänge unterstützt, andernfalls false.
         /// </returns>
-		public override bool CanSeek
-		{
-			get { return true; }
-		}
+        public override bool CanSeek {
+            get { return true; }
+        }
 
         /// <summary>
         /// Ruft beim Überschreiben in einer abgeleiteten Klasse einen Wert ab, der angibt, ob der aktuelle Stream Schreibvorgänge unterstützt.
@@ -143,10 +145,9 @@ namespace Mosa.Runtime.CompilerFramework {
         /// <returns>
         /// true, wenn der Stream Schreibvorgänge unterstützt, andernfalls false.
         /// </returns>
-		public override bool CanWrite
-		{
-			get { return false; }
-		}
+        public override bool CanWrite {
+            get { return false; }
+        }
 
         /// <summary>
         /// Löscht beim Überschreiben in einer abgeleiteten Klasse alle Puffer für diesen Stream und veranlasst die Ausgabe aller gepufferten Daten an das zugrunde liegende Gerät.
@@ -154,10 +155,10 @@ namespace Mosa.Runtime.CompilerFramework {
         /// <exception cref="T:System.IO.IOException">
         /// Ein E/A-Fehler tritt auf.
         /// </exception>
-		public override void Flush()
-		{
-			// Do nothing. We can not flush.
-		}
+        public override void Flush ()
+        {
+            // Do nothing. We can not flush.
+        }
 
         /// <summary>
         /// Ruft beim Überschreiben in einer abgeleiteten Klasse die Länge des Streams in Bytes ab.
@@ -172,10 +173,9 @@ namespace Mosa.Runtime.CompilerFramework {
         /// <exception cref="T:System.ObjectDisposedException">
         /// Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.
         /// </exception>
-		public override long Length
-		{
-			get { return _stream.Length; }
-		}
+        public override long Length {
+            get { return _stream.Length; }
+        }
 
         /// <summary>
         /// Ruft beim Überschreiben in einer abgeleiteten Klasse die Position im aktuellen Stream ab oder legt diese fest.
@@ -193,20 +193,15 @@ namespace Mosa.Runtime.CompilerFramework {
         /// <exception cref="T:System.ObjectDisposedException">
         /// Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.
         /// </exception>
-		public override long Position
-		{
-			get
-			{
-				return _stream.Position;
-			}
-			set
-			{
-				if (0 > value)
-					throw new ArgumentOutOfRangeException(@"value");
+        public override long Position {
+            get { return _stream.Position; }
+            set {
+                if (0 > value)
+                    throw new ArgumentOutOfRangeException ("value");
 
-				_stream.Position = value;
-			}
-		}
+                _stream.Position = value;
+            }
+        }
 
         /// <summary>
         /// Liest beim Überschreiben in einer abgeleiteten Klasse eine Folge von Bytes aus dem aktuellen Stream und erhöht die Position im Stream um die Anzahl der gelesenen Bytes.
@@ -221,10 +216,10 @@ namespace Mosa.Runtime.CompilerFramework {
         /// Die Summe aus <paramref name="offset"/> und <paramref name="count"/> ist größer als die Pufferlänge.
         /// </exception>
         /// <exception cref="T:System.ArgumentNullException">
-        /// 	<paramref name="buffer"/> ist null.
+        ///     <paramref name="buffer"/> ist null.
         /// </exception>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
-        /// 	<paramref name="offset"/> oder <paramref name="count"/> ist negativ.
+        ///     <paramref name="offset"/> oder <paramref name="count"/> ist negativ.
         /// </exception>
         /// <exception cref="T:System.IO.IOException">
         /// Ein E/A-Fehler tritt auf.
@@ -235,14 +230,14 @@ namespace Mosa.Runtime.CompilerFramework {
         /// <exception cref="T:System.ObjectDisposedException">
         /// Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.
         /// </exception>
-		public override int Read(byte[] buffer, int offset, int count)
-		{
-			// Check preconditions
-			if (null == buffer)
-				throw new ArgumentNullException(@"buffer");
+        public override int Read (byte[] buffer, int offset, int count)
+        {
+            // Check preconditions
+            if (null == buffer)
+                throw new ArgumentNullException ("buffer");
 
-			return _stream.Read(buffer, offset, count);
-		}
+            return _stream.Read (buffer, offset, count);
+        }
 
         /// <summary>
         /// Legt beim Überschreiben in einer abgeleiteten Klasse die Position im aktuellen Stream fest.
@@ -261,11 +256,11 @@ namespace Mosa.Runtime.CompilerFramework {
         /// <exception cref="T:System.ObjectDisposedException">
         /// Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.
         /// </exception>
-		public override long Seek(long offset, SeekOrigin origin)
-		{
-			// FIXME: Fix the seeking...
-			return _stream.Seek(offset, origin);
-		}
+        public override long Seek (long offset, SeekOrigin origin)
+        {
+            // FIXME: Fix the seeking...
+            return _stream.Seek (offset, origin);
+        }
 
         /// <summary>
         /// Legt beim Überschreiben in einer abgeleiteten Klasse die Länge des aktuellen Streams fest.
@@ -280,10 +275,10 @@ namespace Mosa.Runtime.CompilerFramework {
         /// <exception cref="T:System.ObjectDisposedException">
         /// Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.
         /// </exception>
-		public override void SetLength(long value)
-		{
-			throw new NotSupportedException();
-		}
+        public override void SetLength (long value)
+        {
+            throw new NotSupportedException ();
+        }
 
         /// <summary>
         /// Schreibt beim Überschreiben in einer abgeleiteten Klasse eine Folge von Bytes in den aktuellen Stream und erhöht die aktuelle Position im Stream um die Anzahl der geschriebenen Bytes.
@@ -295,10 +290,10 @@ namespace Mosa.Runtime.CompilerFramework {
         /// Die Summe aus <paramref name="offset"/> und <paramref name="count"/> ist größer als die Pufferlänge.
         /// </exception>
         /// <exception cref="T:System.ArgumentNullException">
-        /// 	<paramref name="buffer"/> ist null.
+        ///     <paramref name="buffer"/> ist null.
         /// </exception>
         /// <exception cref="T:System.ArgumentOutOfRangeException">
-        /// 	<paramref name="offset"/> oder <paramref name="count"/> ist negativ.
+        ///     <paramref name="offset"/> oder <paramref name="count"/> ist negativ.
         /// </exception>
         /// <exception cref="T:System.IO.IOException">
         /// Ein E/A-Fehler tritt auf.
@@ -309,11 +304,11 @@ namespace Mosa.Runtime.CompilerFramework {
         /// <exception cref="T:System.ObjectDisposedException">
         /// Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.
         /// </exception>
-		public override void Write(byte[] buffer, int offset, int count)
-		{
-			throw new NotSupportedException();
-		}
+        public override void Write (byte[] buffer, int offset, int count)
+        {
+            throw new NotSupportedException ();
+        }
 
-		#endregion // #region Stream Overrides
-	}
+        #endregion
+    }
 }

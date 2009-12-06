@@ -33,7 +33,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         private BasicBlock _prologue;
 
-        #endregion // Data members
+        #endregion
 
         #region IMethodCompilerStage members
 
@@ -41,101 +41,107 @@ namespace Mosa.Runtime.CompilerFramework
         /// Retrieves the name of the compilation stage.
         /// </summary>
         /// <value></value>
-        string IPipelineStage.Name { get { return @"BasicBlockBuilderStage"; } }
+        string IPipelineStage.Name {
+            get { return "BasicBlockBuilderStage"; }
+        }
 
         private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(CIL.DecodingStage)),
-				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(OperandDeterminationStage))
-			};
+            new PipelineStageOrder (PipelineStageOrder.Location.After, typeof(CIL.DecodingStage)),
+            new PipelineStageOrder (PipelineStageOrder.Location.Before, typeof(OperandDeterminationStage))
+        };
 
         /// <summary>
         /// Gets the pipeline stage order.
         /// </summary>
         /// <value>The pipeline stage order.</value>
-        PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
+        PipelineStageOrder[] IPipelineStage.PipelineStageOrder {
+            get { return _pipelineOrder; }
+        }
 
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
-        public void Run()
+        public void Run ()
         {
             // Create the prologue block
-            Context ctx = new Context(InstructionSet, -1);
+            Context ctx = new Context (InstructionSet, -1);
             // Add a jump instruction to the first block from the prologue
             //ctx.InsertInstructionAfter(IR.Instruction.JmpInstruction);
-            ctx.AppendInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
-            ctx.SetBranch(0);
+            ctx.AppendInstruction (CIL.Instruction.Get (CIL.OpCode.Br));
+            ctx.SetBranch (0);
             ctx.Label = -1;
-            _prologue = CreateBlock(-1, ctx.Index);
+            _prologue = CreateBlock (-1, ctx.Index);
 
-            SplitIntoBlocks(0);
+            SplitIntoBlocks (0);
 
             // Create the epilogue block
-            ctx = new Context(InstructionSet, -1);
+            ctx = new Context (InstructionSet, -1);
             // Add null instruction, necessary to generate a block index
-            ctx.AppendInstruction(null);
+            ctx.AppendInstruction (null);
             ctx.Ignore = true;
             ctx.Label = Int32.MaxValue;
-            _epilogue = CreateBlock(Int32.MaxValue, ctx.Index);
+            _epilogue = CreateBlock (Int32.MaxValue, ctx.Index);
 
             // Link all the blocks together
-            BuildBlockLinks(_prologue);
+            BuildBlockLinks (_prologue);
         }
 
         /// <summary>
         /// Finds all targets.
         /// </summary>
         /// <param name="index">The index.</param>
-        private void SplitIntoBlocks(int index)
+        private void SplitIntoBlocks (int index)
         {
-            Dictionary<int, int> targets = new Dictionary<int, int>();
+            Dictionary<int, int> targets = new Dictionary<int, int> ();
 
-            targets.Add(index, -1);
+            targets.Add (index, -1);
 
             // Find out all targets labels
-            for (Context ctx = new Context(InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext())
+            for (Context ctx = new Context (InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext ())
             {
-                switch (ctx.Instruction.FlowControl)
-                {
-                    case FlowControl.Next: continue;
-                    case FlowControl.Call: continue;
-                    case FlowControl.Break:
-                        goto case FlowControl.Branch;
-                    case FlowControl.Return:
-                        continue;
-                    case FlowControl.Throw:
-                        goto case FlowControl.Branch;
-                    case FlowControl.Branch:
-                        // Unconditional branch 
-                        Debug.Assert(ctx.Branch.Targets.Length == 1);
-                        if (!targets.ContainsKey(ctx.Branch.Targets[0]))
-                            targets.Add(ctx.Branch.Targets[0], -1);
-                        continue;
-                    case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
-                    case FlowControl.ConditionalBranch:
-                        // Conditional branch with multiple targets
-                        foreach (int target in ctx.Branch.Targets)
-                            if (!targets.ContainsKey(target))
-                                targets.Add(target, -1);
-                        int next = ctx.Next.Label;
-                        if (!targets.ContainsKey(next))
-                            targets.Add(next, -1);
-                        continue;
-                    default:
-                        Debug.Assert(false);
-                        break;
+                switch (ctx.Instruction.FlowControl) {
+                case FlowControl.Next:
+                    continue;
+                case FlowControl.Call:
+                    continue;
+                case FlowControl.Break:
+                    goto case FlowControl.Branch;
+                case FlowControl.Return:
+                    continue;
+                case FlowControl.Throw:
+                    goto case FlowControl.Branch;
+                case FlowControl.Branch:
+                    // Unconditional branch 
+                    Debug.Assert (ctx.Branch.Targets.Length == 1);
+                    if (!targets.ContainsKey (ctx.Branch.Targets[0]))
+                        targets.Add (ctx.Branch.Targets[0], -1);
+                    continue;
+                case FlowControl.Switch:
+                    goto case FlowControl.ConditionalBranch;
+                case FlowControl.ConditionalBranch:
+                    // Conditional branch with multiple targets
+                    foreach (int target in ctx.Branch.Targets)
+                        if (!targets.ContainsKey (target))
+                            targets.Add (target, -1);
+                    int next = ctx.Next.Label;
+                    if (!targets.ContainsKey (next))
+                        targets.Add (next, -1);
+                    continue;
+                default:
+                    Debug.Assert (false);
+                    break;
                 }
             }
 
             bool slice = false;
 
-            for (Context ctx = new Context(InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext())
+            for (Context ctx = new Context (InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext ())
             {
                 FlowControl flow;
 
-                if (targets.ContainsKey(ctx.Label))
+                if (targets.ContainsKey (ctx.Label))
                 {
-                    CreateBlock(ctx.Label, ctx.Index);
+                    CreateBlock (ctx.Label, ctx.Index);
 
                     if (!ctx.IsFirstInstruction)
                     {
@@ -143,72 +149,79 @@ namespace Mosa.Runtime.CompilerFramework
                         flow = prev.Instruction.FlowControl;
                         if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch)
                         {
-                            prev.AppendInstruction(IR.Instruction.JmpInstruction);
-                            prev.SetBranch(ctx.Label);
-                            prev.SliceAfter();
+                            prev.AppendInstruction (IR.Instruction.JmpInstruction);
+                            prev.SetBranch (ctx.Label);
+                            prev.SliceAfter ();
                         }
                     }
 
-                    targets.Remove(ctx.Label);
+                    targets.Remove (ctx.Label);
                 }
 
                 if (slice)
-                    ctx.SliceBefore();
+                    ctx.SliceBefore ();
 
                 flow = ctx.Instruction.FlowControl;
 
                 slice = (flow == FlowControl.Return || flow == FlowControl.Branch || flow == FlowControl.ConditionalBranch || flow == FlowControl.Break || flow == FlowControl.Throw);
             }
 
-            Debug.Assert(targets.Count <= 1);
+            Debug.Assert (targets.Count <= 1);
 
-            if (FindBlock(0) == null)
-                CreateBlock(0, index);
+            if (FindBlock (0) == null)
+                CreateBlock (0, index);
         }
 
         /// <summary>
         /// Builds the block links.
         /// </summary>
         /// <param name="block">The current block.</param>
-        private void BuildBlockLinks(BasicBlock block)
+        private void BuildBlockLinks (BasicBlock block)
         {
-            for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
+            for (Context ctx = CreateContext (block); !ctx.EndOfInstruction; ctx.GotoNext ())
             {
-                switch (ctx.Instruction.FlowControl)
-                {
-                    case FlowControl.Next: continue;
-                    case FlowControl.Call: continue;
-                    case FlowControl.Return:
-                        if (!block.NextBlocks.Contains(_epilogue))
-                            LinkBlocks(block, _epilogue);
+                switch (ctx.Instruction.FlowControl) {
+                case FlowControl.Next:
+                    continue;
+                case FlowControl.Call:
+                    continue;
+                case FlowControl.Return:
+                    if (!block.NextBlocks.Contains (_epilogue))
+                        LinkBlocks (block, _epilogue);
+                    return;
+                case FlowControl.Break:
+                    goto case FlowControl.Branch;
+                case FlowControl.Throw:
+                    goto case FlowControl.Branch;
+                case FlowControl.Switch:
+                    goto case FlowControl.ConditionalBranch;
+                case FlowControl.Branch:
+                    
+                    {
+                        BasicBlock next = FindBlock (ctx.Branch.Targets[0]);
+                        if (!block.NextBlocks.Contains (next))
+                        {
+                            LinkBlocks (block, next);
+                            BuildBlockLinks (next);
+                        }
                         return;
-                    case FlowControl.Break: goto case FlowControl.Branch;
-                    case FlowControl.Throw: goto case FlowControl.Branch;
-                    case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
-                    case FlowControl.Branch:
+                    }
+
+                case FlowControl.ConditionalBranch:
+                    foreach (int target in ctx.Branch.Targets)
+                    {
+                        BasicBlock next = FindBlock (target);
+                        if (!block.NextBlocks.Contains (next))
                         {
-                            BasicBlock next = FindBlock(ctx.Branch.Targets[0]);
-                            if (!block.NextBlocks.Contains(next))
-                            {
-                                LinkBlocks(block, next);
-                                BuildBlockLinks(next);
-                            }
-                            return;
+                            LinkBlocks (block, next);
+                            BuildBlockLinks (next);
                         }
-                    case FlowControl.ConditionalBranch:
-                        foreach (int target in ctx.Branch.Targets)
-                        {
-                            BasicBlock next = FindBlock(target);
-                            if (!block.NextBlocks.Contains(next))
-                            {
-                                LinkBlocks(block, next);
-                                BuildBlockLinks(next);
-                            }
-                        }
-                        continue;
-                    default:
-                        Debug.Assert(false);
-                        break;
+                    }
+
+                    continue;
+                default:
+                    Debug.Assert (false);
+                    break;
                 }
             }
         }
@@ -218,14 +231,14 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="caller">The caller.</param>
         /// <param name="callee">The callee.</param>
-        private void LinkBlocks(BasicBlock caller, BasicBlock callee)
+        private void LinkBlocks (BasicBlock caller, BasicBlock callee)
         {
             // Chain the blocks together
-            caller.NextBlocks.Add(callee);
-            callee.PreviousBlocks.Add(caller);
+            caller.NextBlocks.Add (callee);
+            callee.PreviousBlocks.Add (caller);
         }
 
-        #endregion // IMethodCompilerStage members
+        #endregion
 
     }
 }

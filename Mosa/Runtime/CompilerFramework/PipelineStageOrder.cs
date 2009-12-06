@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -34,7 +34,7 @@ namespace Mosa.Runtime.CompilerFramework
             /// Place stage immediate after this one
             /// </summary>
             ImmediateAfter
-        };
+        }
 
         /// <summary>
         /// 
@@ -50,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="position">The position.</param>
         /// <param name="stageType">Type of the stage.</param>
-        public PipelineStageOrder(Location position, Type stageType)
+        public PipelineStageOrder (Location position, Type stageType)
         {
             Position = position;
             StageType = stageType;
@@ -60,7 +60,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// Initializes a new instance of the <see cref="PipelineStageOrder"/> class.
         /// </summary>
         /// <param name="position">The position.</param>
-        public PipelineStageOrder(Location position)
+        public PipelineStageOrder (Location position)
         {
             Position = position;
         }
@@ -71,9 +71,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>
         /// A <see cref="System.String"/> that represents this instance.
         /// </returns>
-        public override string ToString()
+        public override string ToString ()
         {
-            return Position.ToString() + " " + StageType.ToString();
+            return Position.ToString () + " " + StageType.ToString ();
         }
 
         /// <summary>
@@ -81,10 +81,10 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="immediateafter">The immediateafter.</param>
         /// <returns></returns>
-        public static PipelineStageOrder[] CreatePipelineOrder(Type immediateafter)
+        public static PipelineStageOrder[] CreatePipelineOrder (Type immediateafter)
         {
             PipelineStageOrder[] pipeline = new PipelineStageOrder[1];
-            pipeline[0] = new PipelineStageOrder(Location.ImmediateAfter, immediateafter);
+            pipeline[0] = new PipelineStageOrder (Location.ImmediateAfter, immediateafter);
             return pipeline;
         }
 
@@ -94,11 +94,11 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="after">The after.</param>
         /// <param name="before">The before.</param>
         /// <returns></returns>
-        public static PipelineStageOrder[] CreatePipelineOrder(Type after, Type before)
+        public static PipelineStageOrder[] CreatePipelineOrder (Type after, Type before)
         {
             PipelineStageOrder[] pipeline = new PipelineStageOrder[2];
-            pipeline[0] = new PipelineStageOrder(Location.After, after);
-            pipeline[1] = new PipelineStageOrder(Location.Before, before);
+            pipeline[0] = new PipelineStageOrder (Location.After, after);
+            pipeline[1] = new PipelineStageOrder (Location.Before, before);
             return pipeline;
         }
 

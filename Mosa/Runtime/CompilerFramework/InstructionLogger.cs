@@ -28,7 +28,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// Retrieves the name of the compilation stage.
         /// </summary>
         /// <value>The name of the compilation stage.</value>
-        string IPipelineStage.Name { get { return @"InstructionLogger"; } }
+        string IPipelineStage.Name {
+            get { return "InstructionLogger"; }
+        }
 
         private PipelineStageOrder[] _pipelineOrder;
 
@@ -36,15 +38,17 @@ namespace Mosa.Runtime.CompilerFramework
         /// Gets the pipeline stage order.
         /// </summary>
         /// <value>The pipeline stage order.</value>
-        PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
+        PipelineStageOrder[] IPipelineStage.PipelineStageOrder {
+            get { return _pipelineOrder; }
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InstructionLogger"/> class.
         /// </summary>
         /// <param name="immediateAfter">The immediate after.</param>
-        public InstructionLogger(Type immediateAfter)
+        public InstructionLogger (Type immediateAfter)
         {
-            _pipelineOrder = PipelineStageOrder.CreatePipelineOrder(immediateAfter);
+            _pipelineOrder = PipelineStageOrder.CreatePipelineOrder (immediateAfter);
         }
 
         /// <summary>
@@ -52,9 +56,9 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="after">The after.</param>
         /// <param name="before">The before.</param>
-        public InstructionLogger(IPipelineStage after, IPipelineStage before)
+        public InstructionLogger (IPipelineStage after, IPipelineStage before)
         {
-            _pipelineOrder = PipelineStageOrder.CreatePipelineOrder(after.GetType(), before.GetType());
+            _pipelineOrder = PipelineStageOrder.CreatePipelineOrder (after.GetType (), before.GetType ());
         }
 
         /// <summary>
@@ -62,47 +66,47 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="after">The after.</param>
         /// <param name="before">The before.</param>
-        public InstructionLogger(Type after, Type before)
+        public InstructionLogger (Type after, Type before)
         {
-            _pipelineOrder = PipelineStageOrder.CreatePipelineOrder(after, before);
+            _pipelineOrder = PipelineStageOrder.CreatePipelineOrder (after, before);
         }
 
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
-        public void Run()
+        public void Run ()
         {
             // Previous stage
-            IPipelineStage prevStage = MethodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
+            IPipelineStage prevStage = MethodCompiler.GetPreviousStage (typeof(IMethodCompilerStage));
 
             // Do not dump internal methods
-            if (MethodCompiler.Method.Name.Contains("<$>"))
+            if (MethodCompiler.Method.Name.Contains ("<$>"))
                 return;
 
             // Line number
             int index = 1;
 
-            Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", MethodCompiler.Method, prevStage.Name));
+            Debug.WriteLine (String.Format ("IR representation of method {0} after stage {1}", MethodCompiler.Method, prevStage.Name));
 
             foreach (BasicBlock block in BasicBlocks)
             {
-                Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
+                Debug.WriteLine (String.Format ("Block #{0} - label L_{1:X4}", index, block.Label));
 
                 foreach (BasicBlock prev in block.PreviousBlocks)
-                    Debug.WriteLine(String.Format("  Prev: L_{0:X4}", prev.Label));
+                    Debug.WriteLine (String.Format ("  Prev: L_{0:X4}", prev.Label));
 
-                Debug.Indent();
-                LogInstructions(new Context(InstructionSet, block));
-                Debug.Unindent();
-                
+                Debug.Indent ();
+                LogInstructions (new Context (InstructionSet, block));
+                Debug.Unindent ();
+
                 foreach (BasicBlock next in block.NextBlocks)
-                    Debug.WriteLine(String.Format("  Next: L_{0:X4}", next.Label));
-                
+                    Debug.WriteLine (String.Format ("  Next: L_{0:X4}", next.Label));
+
                 index++;
             }
         }
 
-        #endregion // IMethodCompilerStage Members
+        #endregion
 
         #region Internals
 
@@ -110,11 +114,11 @@ namespace Mosa.Runtime.CompilerFramework
         /// Logs the instructions in the given enumerable to the trace.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        private void LogInstructions(Context ctx)
+        private void LogInstructions (Context ctx)
         {
-            StringBuilder text = new StringBuilder();
+            StringBuilder text = new StringBuilder ();
 
-            for (; !ctx.EndOfInstruction; ctx.GotoNext())
+            for (; !ctx.EndOfInstruction; ctx.GotoNext ())
             {
 
                 text.Length = 0;
@@ -123,14 +127,14 @@ namespace Mosa.Runtime.CompilerFramework
                     continue;
 
                 if (ctx.Ignore)
-                    text.Append("; ");
+                    text.Append ("; ");
 
-                text.AppendFormat("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx));
+                text.AppendFormat ("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString (ctx));
 
-                Debug.WriteLine(text.ToString());
+                Debug.WriteLine (text.ToString ());
             }
         }
 
-        #endregion // Internals
+        #endregion
     }
 }

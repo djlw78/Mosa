@@ -23,7 +23,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         private int _index;
 
-        #endregion // Data members
+        #endregion
 
         #region Construction
 
@@ -31,20 +31,19 @@ namespace Mosa.Runtime.CompilerFramework
         /// Initializes a new instance of <see cref="Register"/>.
         /// </summary>
         /// <param name="index">The numeric index of the register.</param>
-        protected Register(int index)
+        protected Register (int index)
         {
             _index = index;
         }
 
-        #endregion // Construction
+        #endregion
 
         #region Properties
 
         /// <summary>
         /// Retrieves the numeric index of this register in its architecture.
         /// </summary>
-        public int Index
-        {
+        public int Index {
             get { return _index; }
         }
 
@@ -68,7 +67,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         public abstract int Width { get; }
 
-        #endregion // Properties
+        #endregion
 
         #region Methods
 
@@ -77,8 +76,8 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="type">The signature type to check.</param>
         /// <returns>The return value is true if <paramref name="type"/> can be stored in this register.</returns>
-        public abstract bool IsValidSigType(SigType type);
+        public abstract bool IsValidSigType (SigType type);
 
-        #endregion // Methods
+        #endregion
     }
 }

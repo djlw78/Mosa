@@ -16,32 +16,36 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// Builds and schedules method compilers for a type.
     /// </summary>
-	public class MethodCompilerBuilderStage : IAssemblyCompilerStage, IMethodCompilerBuilder, IPipelineStage
+    public class MethodCompilerBuilderStage : IAssemblyCompilerStage, IMethodCompilerBuilder, IPipelineStage
     {
         #region Data members
 
-        private readonly List<MethodCompilerBase> _methodCompilers = new List<MethodCompilerBase>();
+        private readonly List<MethodCompilerBase> _methodCompilers = new List<MethodCompilerBase> ();
 
         #endregion
 
-		#region IPipelineStage members
+        #region IPipelineStage members
 
-		string IPipelineStage.Name { get { return @"Method Compiler Builder"; } }
+        string IPipelineStage.Name {
+            get { return "Method Compiler Builder"; }
+        }
 
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return null; } }
+        /// <summary>
+        /// Gets the pipeline stage order.
+        /// </summary>
+        /// <value>The pipeline stage order.</value>
+        PipelineStageOrder[] IPipelineStage.PipelineStageOrder {
+            get { return null; }
+        }
 
-		#endregion // IPipelineStage members
+        #endregion
 
-		#region IAssemblyCompilerStage members
+        #region IAssemblyCompilerStage members
 
-		void IAssemblyCompilerStage.Run(AssemblyCompiler compiler)
+        void IAssemblyCompilerStage.Run (AssemblyCompiler compiler)
         {
             // Retrieve the provider provider
-            ReadOnlyRuntimeTypeListView types = RuntimeBase.Instance.TypeLoader.GetTypesFromModule(compiler.Assembly);
+            ReadOnlyRuntimeTypeListView types = RuntimeBase.Instance.TypeLoader.GetTypesFromModule (compiler.Assembly);
             foreach (RuntimeType type in types)
             {
                 // Do not compile generic types
@@ -55,8 +59,8 @@ namespace Mosa.Runtime.CompilerFramework
 
                     if (method.IsNative)
                     {
-                        Debug.WriteLine("Skipping native method: " + type + "." + method.Name);
-                        Debug.WriteLine("Method will not be available in compiled image.");
+                        Debug.WriteLine ("Skipping native method: " + type + "." + method.Name);
+                        Debug.WriteLine ("Method will not be available in compiled image.");
                         continue;
                     }
 
@@ -68,21 +72,20 @@ namespace Mosa.Runtime.CompilerFramework
                     // Schedule the method for compilation...
                     // FIXME: Do we really want to do it this way? Shouldn't we use some compilation service for this?
                     // REFACTOR out of the AssemblyCompiler class
-                    MethodCompilerBase mcb = compiler.CreateMethodCompiler(type, method);
-                    ScheduleMethod(mcb);
+                    MethodCompilerBase mcb = compiler.CreateMethodCompiler (type, method);
+                    ScheduleMethod (mcb);
                 }
             }
         }
 
-        private void ScheduleMethod(MethodCompilerBase mcb)
+        private void ScheduleMethod (MethodCompilerBase mcb)
         {
-            _methodCompilers.Add(mcb);
+            _methodCompilers.Add (mcb);
         }
 
         #endregion
 
-        IEnumerable<MethodCompilerBase> IMethodCompilerBuilder.Scheduled
-        {
+        IEnumerable<MethodCompilerBase> IMethodCompilerBuilder.Scheduled {
             get { return _methodCompilers; }
         }
     }

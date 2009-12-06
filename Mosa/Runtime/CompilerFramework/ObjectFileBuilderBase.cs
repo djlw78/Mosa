@@ -10,8 +10,9 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// Base class for object file builders.
     /// </summary>
-    public abstract class ObjectFileBuilderBase // : IAssemblyLinker
+    public abstract class ObjectFileBuilderBase
     {
+        // : IAssemblyLinker
         /// <summary>
         /// The name of the object file builder
         /// </summary>
@@ -21,25 +22,33 @@ namespace Mosa.Runtime.CompilerFramework
         /// Called when an assembly's compilation begins
         /// </summary>
         /// <param name="compiler">The compiler</param>
-        public virtual void OnAssemblyCompileBegin(AssemblyCompiler compiler) { }
+        public virtual void OnAssemblyCompileBegin (AssemblyCompiler compiler)
+        {
+        }
 
         /// <summary>
         /// Called when an assembly's compilation ends
         /// </summary>
         /// <param name="compiler">The compiler</param>
-        public virtual void OnAssemblyCompileEnd(AssemblyCompiler compiler) { }
+        public virtual void OnAssemblyCompileEnd (AssemblyCompiler compiler)
+        {
+        }
 
         /// <summary>
         /// Called when an methods's compilation begins
         /// </summary>
         /// <param name="compiler">The compiler</param>
-        public virtual void OnMethodCompileBegin(MethodCompilerBase compiler) { }
+        public virtual void OnMethodCompileBegin (MethodCompilerBase compiler)
+        {
+        }
 
         /// <summary>
         /// Called when an methods's compilation ends
         /// </summary>
         /// <param name="compiler">The compiler</param>
-        public virtual void OnMethodCompileEnd(MethodCompilerBase compiler) { }
+        public virtual void OnMethodCompileEnd (MethodCompilerBase compiler)
+        {
+        }
 
         /// <summary>
         /// Allocates the specified member.
@@ -49,7 +58,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="size">The size.</param>
         /// <param name="alignment">The alignment.</param>
         /// <returns></returns>
-        public virtual Stream Allocate(RuntimeMember member, SectionKind section, int size, int alignment)
+        public virtual Stream Allocate (RuntimeMember member, SectionKind section, int size, int alignment)
         {
             return null;
         }
@@ -64,7 +73,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <returns>
         /// A stream, which can be used to populate the section.
         /// </returns>
-        public virtual Stream Allocate(string name, SectionKind section, int size, int alignment)
+        public virtual Stream Allocate (string name, SectionKind section, int size, int alignment)
         {
             return null;
         }
@@ -82,7 +91,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
-        public virtual long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
+        public virtual long Link (LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target)
         {
             return 0;
         }
@@ -100,7 +109,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
-        public virtual long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol)
+        public virtual long Link (LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol)
         {
             return 0;
         }
@@ -109,30 +118,44 @@ namespace Mosa.Runtime.CompilerFramework
         /// Retrieves the collection of sections created during compilation.
         /// </summary>
         /// <value>The sections collection.</value>
-        public ICollection<Linker.LinkerSection> Sections { get { throw new NotImplementedException(); } }
+        public ICollection<Linker.LinkerSection> Sections {
+            get {
+                throw new NotImplementedException ();
+            }
+        }
 
         /// <summary>
         /// Retrieves the collection of symbols known by the linker.
         /// </summary>
         /// <value>The symbol collection.</value>
-        public ICollection<LinkerSymbol> Symbols { get { throw new NotImplementedException(); } }
+        public ICollection<LinkerSymbol> Symbols {
+            get {
+                throw new NotImplementedException ();
+            }
+        }
 
         /// <summary>
         /// Gets the base address.
         /// </summary>
         /// <value>The base address.</value>
-        public long BaseAddress { get { return 0L; } }
+        public long BaseAddress {
+            get { return 0L; }
+        }
 
         /// <summary>
         /// Gets the time stamp.
         /// </summary>
         /// <value>The time stamp.</value>
-        public DateTime TimeStamp { get { return DateTime.Now; } }
+        public DateTime TimeStamp {
+            get { return DateTime.Now; }
+        }
 
         /// <summary>
         /// Gets the entry point symbol.
         /// </summary>
         /// <value>The entry point symbol.</value>
-        public LinkerSymbol EntryPoint { get { return null; } }
+        public LinkerSymbol EntryPoint {
+            get { return null; }
+        }
     }
 }

@@ -56,13 +56,13 @@ namespace Mosa.Runtime.CompilerFramework
         /// of temporaries in a program. Temporaries may be allocated to physical
         /// registers as part of register allocation strategies.
         /// </remarks>
-        Operand CreateTemporary(SigType type);
+        Operand CreateTemporary (SigType type);
 
         /// <summary>
         /// Provides access to the instructions of the method.
         /// </summary>
         /// <returns>A stream, which represents the IL of the method.</returns>
-        Stream GetInstructionStream();
+        Stream GetInstructionStream ();
 
         /// <summary>
         /// Retrieves the local stack operand at the specified <paramref name="index"/>.
@@ -70,54 +70,54 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="index">The index of the local variable to retrieve.</param>
         /// <returns>The operand at the specified index.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
-        Operand GetLocalOperand(int index);
+        Operand GetLocalOperand (int index);
 
         /// <summary>
         /// Creates a new temporary local variable operand.
         /// </summary>
         /// <param name="index">The index of the parameter to retrieve.</param>
         /// <returns>An operand, which represents the temporary.</returns>
-        Operand GetParameterOperand(int index);
+        Operand GetParameterOperand (int index);
 
-		/// <summary>
-		/// Finds a stage, which ran before the current one and supports the specified type.
-		/// </summary>
-		/// <param name="stageType">The (interface) type to look for.</param>
-		/// <returns>The previous compilation stage supporting the requested type.</returns>
-		/// <remarks>
-		/// This method is used by stages to access the results of a previous compilation stage.
-		/// </remarks>
-		IPipelineStage GetPreviousStage(Type stageType);
+        /// <summary>
+        /// Finds a stage, which ran before the current one and supports the specified type.
+        /// </summary>
+        /// <param name="stageType">The (interface) type to look for.</param>
+        /// <returns>The previous compilation stage supporting the requested type.</returns>
+        /// <remarks>
+        /// This method is used by stages to access the results of a previous compilation stage.
+        /// </remarks>
+        IPipelineStage GetPreviousStage (Type stageType);
 
         /// <summary>
         /// Requests a stream to emit native instructions to.
         /// </summary>
         /// <returns>A stream object, which can be used to store emitted instructions.</returns>
-        Stream RequestCodeStream();
+        Stream RequestCodeStream ();
 
         /// <summary>
         /// Sets the signature of local variables in the method.
         /// </summary>
         /// <param name="localVariableSignature">The local variable signature of the method.</param>
-        void SetLocalVariableSignature(LocalVariableSignature localVariableSignature);
+        void SetLocalVariableSignature (LocalVariableSignature localVariableSignature);
 
-		/// <summary>
-		/// Gets the instruction set.
-		/// </summary>
-		/// <value>The instruction set.</value>
-		InstructionSet InstructionSet { get; set;  }
+        /// <summary>
+        /// Gets the instruction set.
+        /// </summary>
+        /// <value>The instruction set.</value>
+        InstructionSet InstructionSet { get; set; }
 
-		/// <summary>
-		/// Gets the basic Blocks.
-		/// </summary>
-		/// <value>The basic Blocks.</value>
-		List<BasicBlock> BasicBlocks { get; set; }
+        /// <summary>
+        /// Gets the basic Blocks.
+        /// </summary>
+        /// <value>The basic Blocks.</value>
+        List<BasicBlock> BasicBlocks { get; set; }
 
-		/// <summary>
-		/// Retrieves a basic block from its label.
-		/// </summary>
-		/// <param name="label">The label of the basic block.</param>
-		/// <returns>The basic block with the given label or null.</returns>
-		BasicBlock FromLabel(int label);
+        /// <summary>
+        /// Retrieves a basic block from its label.
+        /// </summary>
+        /// <param name="label">The label of the basic block.</param>
+        /// <returns>The basic block with the given label or null.</returns>
+        BasicBlock FromLabel (int label);
     }
 }
