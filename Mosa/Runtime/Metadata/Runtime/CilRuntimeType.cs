@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -45,7 +45,7 @@ namespace Mosa.Runtime.Metadata.Runtime
         /// </summary>
         private TokenTypes namespaceIdx;
 
-        #endregion // Data Members
+        #endregion
 
         #region Construction
 
@@ -59,8 +59,7 @@ namespace Mosa.Runtime.Metadata.Runtime
         /// <param name="maxMethod">The max method.</param>
         /// <param name="packing">The packing.</param>
         /// <param name="size">The size.</param>
-        public CilRuntimeType(TokenTypes token, IMetadataModule module, ref TypeDefRow typeDefRow, TokenTypes maxField, TokenTypes maxMethod, int packing, int size) :
-            base((int)token, module)
+        public CilRuntimeType (TokenTypes token, IMetadataModule module, ref TypeDefRow typeDefRow, TokenTypes maxField, TokenTypes maxMethod, int packing, int size) : base((int)token, module)
         {
             this.baseTypeToken = typeDefRow.Extends;
             this.module = module;
@@ -75,8 +74,8 @@ namespace Mosa.Runtime.Metadata.Runtime
             int members = maxField - typeDefRow.FieldList;
             if (0 < members)
             {
-                int i = (int)(typeDefRow.FieldList & TokenTypes.RowIndexMask) - 1 + RuntimeBase.Instance.TypeLoader.GetModuleOffset(module).FieldOffset;
-                base.Fields = new ReadOnlyRuntimeFieldListView(i, members);
+                int i = (int)(typeDefRow.FieldList & TokenTypes.RowIndexMask) - 1 + RuntimeBase.Instance.TypeLoader.GetModuleOffset (module).FieldOffset;
+                base.Fields = new ReadOnlyRuntimeFieldListView (i, members);
             }
             else
             {
@@ -87,8 +86,8 @@ namespace Mosa.Runtime.Metadata.Runtime
             members = maxMethod - typeDefRow.MethodList;
             if (0 < members)
             {
-                int i = (int)(typeDefRow.MethodList & TokenTypes.RowIndexMask) - 1 + RuntimeBase.Instance.TypeLoader.GetModuleOffset(module).MethodOffset;
-                base.Methods = new ReadOnlyRuntimeMethodListView(i, members);
+                int i = (int)(typeDefRow.MethodList & TokenTypes.RowIndexMask) - 1 + RuntimeBase.Instance.TypeLoader.GetModuleOffset (module).MethodOffset;
+                base.Methods = new ReadOnlyRuntimeMethodListView (i, members);
             }
             else
             {
@@ -96,7 +95,7 @@ namespace Mosa.Runtime.Metadata.Runtime
             }
         }
 
-        #endregion // Construction
+        #endregion
 
         #region Methods
 
@@ -107,36 +106,31 @@ namespace Mosa.Runtime.Metadata.Runtime
         /// <returns>
         /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
-        public override bool Equals(RuntimeType other)
+        public override bool Equals (RuntimeType other)
         {
             CilRuntimeType crt = other as CilRuntimeType;
-            return (crt != null && 
-                    this.module == crt.module && 
-                    this.nameIdx == crt.nameIdx && 
-                    this.namespaceIdx == crt.namespaceIdx && 
-                    this.baseTypeToken == crt.baseTypeToken &&
-                    base.Equals(other) == true);
+            return (crt != null && this.module == crt.module && this.nameIdx == crt.nameIdx && this.namespaceIdx == crt.namespaceIdx && this.baseTypeToken == crt.baseTypeToken && base.Equals (other) == true);
         }
 
         /// <summary>
         /// Gets the base type.
         /// </summary>
         /// <returns>The base type.</returns>
-        protected override RuntimeType GetBaseType()
+        protected override RuntimeType GetBaseType ()
         {
             ITypeSystem typeSystem = RuntimeBase.Instance.TypeLoader;
-            return typeSystem.GetType(this.Module, this.baseTypeToken);
+            return typeSystem.GetType (this.Module, this.baseTypeToken);
         }
 
         /// <summary>
         /// Called to retrieve the name of the type.
         /// </summary>
         /// <returns>The name of the type.</returns>
-        protected override string GetName()
+        protected override string GetName ()
         {
             string name;
-            this.module.Metadata.Read(this.nameIdx, out name);
-            Debug.Assert(name != null, @"Failed to retrieve CilRuntimeMethod name.");
+            this.module.Metadata.Read (this.nameIdx, out name);
+            Debug.Assert (name != null, "Failed to retrieve CilRuntimeMethod name.");
             return name;
         }
 
@@ -144,14 +138,14 @@ namespace Mosa.Runtime.Metadata.Runtime
         /// Called to retrieve the namespace of the type.
         /// </summary>
         /// <returns>The namespace of the type.</returns>
-        protected override string GetNamespace()
+        protected override string GetNamespace ()
         {
             string @namespace;
-            this.module.Metadata.Read(this.namespaceIdx, out @namespace);
-            Debug.Assert(@namespace != null, @"Failed to retrieve CilRuntimeMethod name.");
+            this.module.Metadata.Read (this.namespaceIdx, out @namespace);
+            Debug.Assert (@namespace != null, "Failed to retrieve CilRuntimeMethod name.");
             return @namespace;
         }
 
-        #endregion // Methods
+        #endregion
     }
 }

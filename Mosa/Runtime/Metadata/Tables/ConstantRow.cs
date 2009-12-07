@@ -12,20 +12,19 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace Mosa.Runtime.Metadata.Tables 
+namespace Mosa.Runtime.Metadata.Tables
 {
     /// <summary>
     /// 
     /// </summary>
-	public struct ConstantRow 
+    public struct ConstantRow
     {
-		#region Data members
+        #region Data members
 
         /// <summary>
         /// 
         /// </summary>
-        private CilElementType _type; // FIXME: Enum?
-
+        private CilElementType _type;
         /// <summary>
         /// 
         /// </summary>
@@ -36,7 +35,7 @@ namespace Mosa.Runtime.Metadata.Tables
         /// </summary>
         private TokenTypes _valueBlobIdx;
 
-		#endregion // Data members
+        #endregion
 
         #region Construction
 
@@ -46,14 +45,14 @@ namespace Mosa.Runtime.Metadata.Tables
         /// <param name="type">The type.</param>
         /// <param name="parent">The parent.</param>
         /// <param name="valueBlobIdx">The value BLOB idx.</param>
-        public ConstantRow(CilElementType type, TokenTypes parent, TokenTypes valueBlobIdx)
+        public ConstantRow (CilElementType type, TokenTypes parent, TokenTypes valueBlobIdx)
         {
             _type = type;
             _parent = parent;
             _valueBlobIdx = valueBlobIdx;
         }
 
-        #endregion // Construction
+        #endregion
 
         #region Properties
 
@@ -84,6 +83,6 @@ namespace Mosa.Runtime.Metadata.Tables
             get { return _valueBlobIdx; }
         }
 
-        #endregion // Properties
-	}
+        #endregion
+    }
 }
