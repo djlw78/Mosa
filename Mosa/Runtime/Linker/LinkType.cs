@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,13 +7,13 @@ namespace Mosa.Runtime.Linker
     /// <summary>
     /// Specifies the type of link to perform by the linker.
     /// </summary>
-    [Flags]
+    [Flags()]
     public enum LinkType : byte
     {
         /// <summary>
         /// Specifies the kind of link to perform.
         /// </summary>
-        KindMask = 0xF0,
+        KindMask = 0xf0,
 
         /// <summary>
         /// The link destination receives a relative address.
@@ -28,26 +28,26 @@ namespace Mosa.Runtime.Linker
         /// <summary>
         /// Mask to retrieve the size of the address to store.
         /// </summary>
-        SizeMask = 0x0F,
+        SizeMask = 0xf,
 
         /// <summary>
         /// An 8-bit offset link.
         /// </summary>
-        I1 = 0x01,
+        I1 = 0x1,
 
         /// <summary>
         /// A 16-bit offset link.
         /// </summary>
-        I2 = 0x02,
+        I2 = 0x2,
 
         /// <summary>
         /// A 32-bit offset link.
         /// </summary>
-        I4 = 0x04,
+        I4 = 0x4,
 
         /// <summary>
         /// A 64-bit offset link.
         /// </summary>
-        I8 = 0x08,
+        I8 = 0x8
     }
 }

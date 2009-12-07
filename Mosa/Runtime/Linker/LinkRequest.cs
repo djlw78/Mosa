@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -52,7 +52,7 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         private readonly IntPtr offset;
 
-        #endregion // Data members
+        #endregion
 
         #region Construction
 
@@ -65,7 +65,7 @@ namespace Mosa.Runtime.Linker
         /// <param name="methodRelativeBase">The method relative base.</param>
         /// <param name="targetSymbolName">The linker symbol to link against.</param>
         /// <param name="offset">An offset to apply to the link target.</param>
-        public LinkRequest(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbolName, IntPtr offset)
+        public LinkRequest (LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbolName, IntPtr offset)
         {
             this.symbolName = symbolName;
             this.methodOffset = methodOffset;
@@ -75,7 +75,7 @@ namespace Mosa.Runtime.Linker
             this.offset = offset;
         }
 
-        #endregion // Construction
+        #endregion
 
         #region Properties
 
@@ -129,6 +129,6 @@ namespace Mosa.Runtime.Linker
             get { return this.offset; }
         }
 
-        #endregion // Properties
+        #endregion
     }
 }

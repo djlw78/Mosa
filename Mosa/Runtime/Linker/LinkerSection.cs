@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         private string name;
 
-        #endregion // Data members
+        #endregion
 
         #region Construction
 
@@ -50,14 +50,14 @@ namespace Mosa.Runtime.Linker
         /// <param name="kind">The kind of the section.</param>
         /// <param name="name">The name.</param>
         /// <param name="virtualAddress">The virtualAddress.</param>
-        protected LinkerSection(SectionKind kind, string name, IntPtr virtualAddress)
+        protected LinkerSection (SectionKind kind, string name, IntPtr virtualAddress)
         {
             this.virtualAddress = virtualAddress;
             this.kind = kind;
             this.name = name;
         }
 
-        #endregion // Construction
+        #endregion
 
         #region Properties
 
@@ -68,7 +68,7 @@ namespace Mosa.Runtime.Linker
         public IntPtr VirtualAddress
         {
             get { return this.virtualAddress; }
-            internal protected set { this.virtualAddress = value; }
+            protected internal set { this.virtualAddress = value; }
         }
 
         /// <summary>
@@ -108,17 +108,17 @@ namespace Mosa.Runtime.Linker
             get { return this.kind; }
         }
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString()
-		{
-			return this.name;
-		}
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
+        public override string ToString ()
+        {
+            return this.name;
+        }
 
-        #endregion // Properties
+        #endregion
     }
 }

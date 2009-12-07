@@ -34,51 +34,77 @@ namespace Mosa.Runtime.Linker
         /// Gets the base virtualAddress.
         /// </summary>
         /// <value>The base virtualAddress.</value>
-        long BaseAddress { get; }
+        long BaseAddress
+        {
+            get;
+        }
 
         /// <summary>
         /// Gets or sets the entry point symbol.
         /// </summary>
         /// <value>The entry point symbol.</value>
-        LinkerSymbol EntryPoint { get; set; }
+        LinkerSymbol EntryPoint
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets the load alignment of sections.
         /// </summary>
         /// <value>The load alignment.</value>
-        long LoadSectionAlignment { get; }
+        long LoadSectionAlignment
+        {
+            get;
+        }
 
         /// <summary>
         /// Retrieves the collection of sections created during compilation.
         /// </summary>
         /// <value>The sections collection.</value>
-        ICollection<LinkerSection> Sections { get; }
+        ICollection<LinkerSection> Sections
+        {
+            get;
+        }
 
         /// <summary>
         /// Retrieves the collection of symbols known by the linker.
         /// </summary>
         /// <value>The symbol collection.</value>
-        ICollection<LinkerSymbol> Symbols { get; }
+        ICollection<LinkerSymbol> Symbols
+        {
+            get;
+        }
 
         /// <summary>
         /// Gets or sets the output file of the linker.
         /// </summary>
         /// <value>The output file.</value>
-        string OutputFile { get; set; }
+        string OutputFile
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Gets the time stamp.
         /// </summary>
         /// <value>The time stamp.</value>
-        DateTime TimeStamp { get; }
+        DateTime TimeStamp
+        {
+            get;
+        }
 
         /// <summary>
         /// Gets the virtual alignment of sections.
         /// </summary>
         /// <value>The virtual section alignment.</value>
-        long VirtualSectionAlignment { get; }
+        long VirtualSectionAlignment
+        {
+            get;
+        }
 
-        #endregion // Properties
+        #endregion
 
         #region Methods
 
@@ -90,7 +116,7 @@ namespace Mosa.Runtime.Linker
         /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
         /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
         /// <returns>A stream, which can be used to populate the section.</returns>
-        Stream Allocate(RuntimeMember symbol, SectionKind section, int size, int alignment);
+        Stream Allocate (RuntimeMember symbol, SectionKind section, int size, int alignment);
 
         /// <summary>
         /// Allocates a symbol of the given name in the specified section.
@@ -100,14 +126,14 @@ namespace Mosa.Runtime.Linker
         /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
         /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
         /// <returns>A stream, which can be used to populate the section.</returns>
-        Stream Allocate(string name, SectionKind section, int size, int alignment);
+        Stream Allocate (string name, SectionKind section, int size, int alignment);
 
         /// <summary>
         /// Gets the section.
         /// </summary>
         /// <param name="sectionKind">Kind of the section.</param>
         /// <returns>The section of the requested kind.</returns>
-        LinkerSection GetSection(SectionKind sectionKind);
+        LinkerSection GetSection (SectionKind sectionKind);
 
         /// <summary>
         /// Retrieves a linker symbol.
@@ -116,7 +142,7 @@ namespace Mosa.Runtime.Linker
         /// <returns>A linker symbol, which represents the runtime member.</returns>
         /// <exception cref="System.ArgumentNullException"><paramref name="member"/> is null.</exception>
         /// <exception cref="System.ArgumentException">There's no symbol for the given member.</exception>
-        LinkerSymbol GetSymbol(RuntimeMember member);
+        LinkerSymbol GetSymbol (RuntimeMember member);
 
         /// <summary>
         /// Retrieves a linker symbol.
@@ -125,7 +151,7 @@ namespace Mosa.Runtime.Linker
         /// <returns>The named linker symbol.</returns>
         /// <exception cref="System.ArgumentNullException"><paramref name="symbolName"/> is null.</exception>
         /// <exception cref="System.ArgumentException">There's no symbol of the given name.</exception>
-        LinkerSymbol GetSymbol(string symbolName);
+        LinkerSymbol GetSymbol (string symbolName);
 
         /// <summary>
         /// Issues a linker request for the given runtime method.
@@ -141,7 +167,7 @@ namespace Mosa.Runtime.Linker
         /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
-        long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target, IntPtr offset);
+        long Link (LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target, IntPtr offset);
 
         /// <summary>
         /// Issues a linker request for the given runtime method.
@@ -157,7 +183,7 @@ namespace Mosa.Runtime.Linker
         /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
-        long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbolName, IntPtr offset);
+        long Link (LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbolName, IntPtr offset);
 
         /// <summary>
         /// Issues a linker request for the given runtime method.
@@ -173,15 +199,15 @@ namespace Mosa.Runtime.Linker
         /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
         /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
         /// </returns>
-        long Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset);
+        long Link (LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset);
 
         /// <summary>
         /// Creates a canonical symbol name for the given runtime member
         /// </summary>
         /// <param name="member">The runtime member to create a symbol name for</param>
         /// <returns>A string containing the canonical symbol name for the given runtime member</returns>
-        string CreateSymbolName(RuntimeMember member);
+        string CreateSymbolName (RuntimeMember member);
 
-        #endregion // Methods
+        #endregion
     }
 }
