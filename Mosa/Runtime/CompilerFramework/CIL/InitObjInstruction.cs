@@ -74,6 +74,18 @@ namespace Mosa.Runtime.CompilerFramework.CIL
             return result;
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="field">
+        /// A <see cref="TokenTypes"/>
+        /// </param>
+        /// <param name="compiler">
+        /// A <see cref="IMethodCompiler"/>
+        /// </param>
+        /// <returns>
+        /// A <see cref="System.Int32"/>
+        /// </returns>
         private static int FieldSize (TokenTypes field, IMethodCompiler compiler)
         {
             Metadata.Tables.FieldRow fieldRow;
@@ -92,6 +104,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
             return size;
         }
 
+        /// <summary>
+        /// Returns the token defined by the given token's signature
+        /// </summary>
+        /// <param name="metadata">The metadata provider.</param>
+        /// <param name="signatureToken">The current token.</param>
+        /// <returns>The token from the current token's signature</returns>
         private static TokenTypes ValueTokenTypeFromSignature (IMetadataProvider metadata, TokenTypes signatureToken)
         {
             int index = 1;
