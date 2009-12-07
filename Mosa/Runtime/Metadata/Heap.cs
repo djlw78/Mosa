@@ -11,136 +11,130 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace Mosa.Runtime.Metadata {
+namespace Mosa.Runtime.Metadata
+{
 
-	/// <summary>
-	/// Base class for provider heaps.
-	/// </summary>
-	public abstract class Heap {
-		#region Data members
+    /// <summary>
+    /// Base class for provider heaps.
+    /// </summary>
+    public abstract class Heap
+    {
+        #region Data members
 
-		/// <summary>
-		/// Metadata heap buffer.
-		/// </summary>
-		protected byte[] _metadata;
+        /// <summary>
+        /// Metadata heap buffer.
+        /// </summary>
+        protected byte[] _metadata;
 
-		/// <summary>
-		/// Offset into _metadata, where this heap starts.
-		/// </summary>
-		protected int _offset;
+        /// <summary>
+        /// Offset into _metadata, where this heap starts.
+        /// </summary>
+        protected int _offset;
 
-		/// <summary>
-		/// The number of bytes allocated to this heap.
-		/// </summary>
-		protected int _size;
+        /// <summary>
+        /// The number of bytes allocated to this heap.
+        /// </summary>
+        protected int _size;
 
-		#endregion // Data members
+        #endregion
 
-		#region Construction
+        #region Construction
 
-		/// <summary>
-		/// Initializes a new instance of <see cref="Mosa.Runtime.Metadata.Heap"/>.
-		/// </summary>
+        /// <summary>
+        /// Initializes a new instance of <see cref="Mosa.Runtime.Metadata.Heap"/>.
+        /// </summary>
         /// <param name="metadata">The byte array, which holds the provider.</param>
-		/// <param name="offset">The offset into the byte array, where the heap starts.</param>
-		/// <param name="size">The size of the heap in bytes.</param>
-		public Heap(byte[] metadata, int offset, int size)
-		{
-			if (null == metadata)
-				throw new ArgumentNullException(@"provider");
-			
-			_metadata = metadata;
-			_offset = offset;
-			_size = size;
-		}
+        /// <param name="offset">The offset into the byte array, where the heap starts.</param>
+        /// <param name="size">The size of the heap in bytes.</param>
+        public Heap (byte[] metadata, int offset, int size)
+        {
+            if (null == metadata)
+                throw new ArgumentNullException ("provider");
 
-		#endregion // Construction
+            _metadata = metadata;
+            _offset = offset;
+            _size = size;
+        }
 
-		#region Properties
+        #endregion
 
-		/// <summary>
-		/// Enables derived classes to access the provider buffer.
-		/// </summary>
-		protected byte[] Buffer
-		{
-			get
-			{
-				return _metadata;
-			}
-		}
+        #region Properties
 
-		/// <summary>
-		/// Retrieves the size of the heap.
-		/// </summary>
-		public int Size
-		{
-			get
-			{
-				return _size;
-			}
-		}
+        /// <summary>
+        /// Enables derived classes to access the provider buffer.
+        /// </summary>
+        protected byte[] Buffer
+        {
+            get { return _metadata; }
+        }
 
-		#endregion // Properties
+        /// <summary>
+        /// Retrieves the size of the heap.
+        /// </summary>
+        public int Size
+        {
+            get { return _size; }
+        }
 
-		#region Methods
+        #endregion
 
-		/// <summary>
-		/// Validates the passed offset in the heap range.
-		/// </summary>
-		/// <param name="offset">The offset to validate.</param>
-		/// <exception cref="System.ArgumentException">Thrown if the offset value is larger than the size of the heap or negative.</exception>
-		protected int ValidateOffset(int offset)
-		{
-			if (0 > offset || offset >= _size)
-				throw new ArgumentException(@"Invalid offset value.", @"offset");
+        #region Methods
 
-			return _offset + offset;
-		}
+        /// <summary>
+        /// Validates the passed offset in the heap range.
+        /// </summary>
+        /// <param name="offset">The offset to validate.</param>
+        /// <exception cref="System.ArgumentException">Thrown if the offset value is larger than the size of the heap or negative.</exception>
+        protected int ValidateOffset (int offset)
+        {
+            if (0 > offset || offset >= _size)
+                throw new ArgumentException ("Invalid offset value.", "offset");
 
-		/// <summary>
-		/// Calculates the byte length of prefixed data structures in the blob and user string heap.
-		/// </summary>
-		/// <param name="offset">The offset, where the length prefix is located.</param>
-		/// <returns>The length of the data structure in bytes.</returns>
-		/// <exception cref="System.ArgumentException">The specified offset is either negative or out of range.</exception>
-		/// <exception cref="System.BadImageFormatException">The provider buffer is malformed. The retrieved length exceeds the heap space.</exception>
-		protected int CalculatePrefixLength(ref int offset)
-		{
-			// FIXME: Check preconditions
-			if (0 > offset || offset > _offset + _size)
-				throw new ArgumentException(@"Invalid prefix offset specified.");
+            return _offset + offset;
+        }
 
-			// Return value
-			int result;
+        /// <summary>
+        /// Calculates the byte length of prefixed data structures in the blob and user string heap.
+        /// </summary>
+        /// <param name="offset">The offset, where the length prefix is located.</param>
+        /// <returns>The length of the data structure in bytes.</returns>
+        /// <exception cref="System.ArgumentException">The specified offset is either negative or out of range.</exception>
+        /// <exception cref="System.BadImageFormatException">The provider buffer is malformed. The retrieved length exceeds the heap space.</exception>
+        protected int CalculatePrefixLength (ref int offset)
+        {
+            // FIXME: Check preconditions
+            if (0 > offset || offset > _offset + _size)
+                throw new ArgumentException ("Invalid prefix offset specified.");
 
-			if (0xC0 == (_metadata[offset] & 0xC0))
-			{
-				// A 4 byte length...
-				result = ((_metadata[offset] & 0x1F) << 24) + (_metadata[offset + 1] << 16) + (_metadata[offset + 2] << 8) + _metadata[offset + 3];
-				offset += 4;
-			}
-			else if (0x80 == (_metadata[offset] & 0x80))
-			{
-				// A 2 byte length...
-				result = ((_metadata[offset] & 0x3F) << 8) + _metadata[offset + 1];
-				offset += 2;
-			}
-			else
-			{
-				result = _metadata[offset] & 0x7F;
-				offset += 1;
-			}
+            // Return value
+            int result;
 
-			// Make sure there's enough room left in the heap
-			if (offset + result > _offset + _size)
-				throw new BadImageFormatException();
+            if (0xc0 == (_metadata[offset] & 0xc0))
+            {
+                // A 4 byte length...
+                result = ((_metadata[offset] & 0x1f) << 24) + (_metadata[offset + 1] << 16) + (_metadata[offset + 2] << 8) + _metadata[offset + 3];
+                offset += 4;
+            } else if (0x80 == (_metadata[offset] & 0x80))
+            {
+                // A 2 byte length...
+                result = ((_metadata[offset] & 0x3f) << 8) + _metadata[offset + 1];
+                offset += 2;
+            } else
+            {
+                result = _metadata[offset] & 0x7f;
+                offset += 1;
+            }
 
-			return result;
-		}
+            // Make sure there's enough room left in the heap
+            if (offset + result > _offset + _size)
+                throw new BadImageFormatException ();
 
-		#endregion // Methods
+            return result;
+        }
 
-		#region Static methods
+        #endregion
+
+        #region Static methods
 
         /// <summary>
         /// Creates an instance of a specific heap type.
@@ -152,29 +146,28 @@ namespace Mosa.Runtime.Metadata {
         /// <param name="size">The size of the heap in bytes.</param>
         /// <returns>An instance of the requested heap type.</returns>
         /// <exception cref="System.ArgumentException">An invalid heap type was requested.</exception>
-		public static Heap CreateHeap(IMetadataProvider provider, HeapType type, byte[] metadata, int offset, int size)
-		{
-			switch (type)
-			{
-				case HeapType.String:
-					return new StringHeap(metadata, offset, size);
+        public static Heap CreateHeap (IMetadataProvider provider, HeapType type, byte[] metadata, int offset, int size)
+        {
+            switch (type) {
+                case HeapType.String:
+                    return new StringHeap (metadata, offset, size);
 
-				case HeapType.Guid:
-					return new GuidHeap(metadata, offset, size);
+                case HeapType.Guid:
+                    return new GuidHeap (metadata, offset, size);
 
-				case HeapType.Blob:
-					return new BlobHeap(metadata, offset, size);
+                case HeapType.Blob:
+                    return new BlobHeap (metadata, offset, size);
 
-				case HeapType.UserString:
-					return new UserStringHeap(metadata, offset, size);
+                case HeapType.UserString:
+                    return new UserStringHeap (metadata, offset, size);
 
-				case HeapType.Tables:
-					return new TableHeap(provider, metadata, offset, size);
-			}
+                case HeapType.Tables:
+                    return new TableHeap (provider, metadata, offset, size);
+            }
 
-			throw new ArgumentException(@"Invalid heap type.", @"type");
-		}
+            throw new ArgumentException ("Invalid heap type.", "type");
+        }
 
-		#endregion // Static methods
-	}
+        #endregion
+    }
 }

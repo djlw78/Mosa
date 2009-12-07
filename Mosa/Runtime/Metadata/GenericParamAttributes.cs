@@ -11,42 +11,44 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Runtime.Metadata {
+namespace Mosa.Runtime.Metadata
+{
     /// <summary>
     /// 
     /// </summary>
-	public enum GenericParamAttributes {
+    public enum GenericParamAttributes
+    {
         /// <summary>
         /// 
         /// </summary>
-		VarianceMask = 0x03,
+        VarianceMask = 0x3,
         /// <summary>
         /// 
         /// </summary>
-		None = 0x00,
+        None = 0x0,
         /// <summary>
         /// 
         /// </summary>
-		Covariant = 0x01,
+        Covariant = 0x1,
         /// <summary>
         /// 
         /// </summary>
-		Contravariant = 0x02,
+        Contravariant = 0x2,
         /// <summary>
         /// 
         /// </summary>
-		SpecialConstraintMask = 0x1C,
+        SpecialConstraintMask = 0x1c,
         /// <summary>
         /// 
         /// </summary>
-		ReferenceTypeConstraint = 0x04,
+        ReferenceTypeConstraint = 0x4,
         /// <summary>
         /// 
         /// </summary>
-		NotNullableValueTypeConstraint = 0x08,
+        NotNullableValueTypeConstraint = 0x8,
         /// <summary>
         /// 
         /// </summary>
-		DefaultConstructorConstraint = 0x10
-	}
+        DefaultConstructorConstraint = 0x10
+    }
 }
