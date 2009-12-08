@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -50,7 +50,7 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         private long sectionAddress;
 
-        #endregion // Data members
+        #endregion
 
         #region Construction
 
@@ -62,20 +62,20 @@ namespace Mosa.Runtime.Linker
         /// <param name="sectionAddress">Holds the section relative address of the symbol.</param>
         /// <exception cref="T:System.ArgumentException"><paramref name="name"/> is empty.</exception>
         /// <exception cref="T:System.ArgumentNullException"><paramref name="name"/> is null.</exception>
-        public LinkerSymbol(string name, SectionKind section, long sectionAddress)
+        public LinkerSymbol (string name, SectionKind section, long sectionAddress)
         {
-            Debug.Assert(!String.IsNullOrEmpty(name), @"LinkerSymbol requires a proper name.");
+            Debug.Assert (!String.IsNullOrEmpty (name), "LinkerSymbol requires a proper name.");
             if (name == null)
-                throw new ArgumentNullException(@"name");
+                throw new ArgumentNullException ("name");
             if (name.Length == 0)
-                throw new ArgumentException(@"Name can't be empty.", @"name");
+                throw new ArgumentException ("Name can't be empty.", "name");
 
             this.name = name;
             this.section = section;
             this.sectionAddress = sectionAddress;
         }
 
-        #endregion // Construction
+        #endregion
 
         #region Properties
 
@@ -136,17 +136,17 @@ namespace Mosa.Runtime.Linker
             get { return this.sectionAddress; }
         }
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString()
-		{
-			return this.name;
-		} 
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
+        public override string ToString ()
+        {
+            return this.name;
+        }
 
-        #endregion // Properties
+        #endregion
     }
 }

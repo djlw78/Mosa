@@ -19,7 +19,7 @@ namespace Mosa.Runtime.Linker
     /// <summary>
     /// An assembly compilation stage, which generates a map file of the built binary file.
     /// </summary>
-	public sealed class MapFileGenerationStage : IAssemblyCompilerStage, IPipelineStage
+    public sealed class MapFileGenerationStage : IAssemblyCompilerStage, IPipelineStage
     {
         #region Data members
 
@@ -28,38 +28,45 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         private TextWriter writer;
 
-        #endregion // Data members
+        #endregion
 
         #region Construction
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MapFileGenerationStage"/> class.
         /// </summary>
-        public MapFileGenerationStage(TextWriter writer)
+        public MapFileGenerationStage (TextWriter writer)
         {
             if (null == writer)
-                throw new ArgumentNullException(@"writer");
+                throw new ArgumentNullException ("writer");
 
             this.writer = writer;
         }
 
-        #endregion // Construction
+        #endregion
 
-		#region IPipelineStage members
+        #region IPipelineStage members
 
-		string IPipelineStage.Name { get { return @"MapFileGenerationStage"; } }
+        string IPipelineStage.Name
+        {
+            get { return "MapFileGenerationStage"; }
+        }
 
-		private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-				// TODO
-			};
+        private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
+            
+            // TODO
+        };
 
-		/// <summary>
-		/// Gets the pipeline stage order.
-		/// </summary>
-		/// <value>The pipeline stage order.</value>
-		PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
+        /// <summary>
+        /// Gets the pipeline stage order.
+        /// </summary>
+        /// <value>The pipeline stage order.</value>
+        PipelineStageOrder[] IPipelineStage.PipelineStageOrder
+        {
+            get { return _pipelineOrder; }
+        }
 
-		#endregion // IPipelineStage members
+        #endregion
 
         #region IAssemblyCompilerStage Members
 
@@ -67,28 +74,28 @@ namespace Mosa.Runtime.Linker
         /// Performs stage specific processing on the compiler context.
         /// </summary>
         /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(AssemblyCompiler compiler)
+        public void Run (AssemblyCompiler compiler)
         {
             // Retrieve the linker
-            IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker>();
+            IAssemblyLinker linker = compiler.Pipeline.Find<IAssemblyLinker> ();
 
             // Emit map file _header
-            this.writer.WriteLine(linker.OutputFile);
-            this.writer.WriteLine();
-            this.writer.WriteLine("Timestamp is {0}", linker.TimeStamp);
-            this.writer.WriteLine();
-            this.writer.WriteLine("Preferred load address is {0:x16}", linker.BaseAddress);
-            this.writer.WriteLine();
+            this.writer.WriteLine (linker.OutputFile);
+            this.writer.WriteLine ();
+            this.writer.WriteLine ("Timestamp is {0}", linker.TimeStamp);
+            this.writer.WriteLine ();
+            this.writer.WriteLine ("Preferred load address is {0:x16}", linker.BaseAddress);
+            this.writer.WriteLine ();
 
             // Emit the sections
-            EmitSections(linker);
-            this.writer.WriteLine();
+            EmitSections (linker);
+            this.writer.WriteLine ();
 
             // Emit all symbols
-            EmitSymbols(linker);
+            EmitSymbols (linker);
         }
 
-        #endregion // IAssemblyCompilerStage Members
+        #endregion
 
         #region Internals
 
@@ -96,12 +103,12 @@ namespace Mosa.Runtime.Linker
         /// Emits all the section created in the binary file.
         /// </summary>
         /// <param name="linker">The assembly linker.</param>
-        private void EmitSections(IAssemblyLinker linker)
+        private void EmitSections (IAssemblyLinker linker)
         {
-            this.writer.WriteLine("Offset           Virtual          Length           Name                             Class");
+            this.writer.WriteLine ("Offset           Virtual          Length           Name                             Class");
             foreach (LinkerSection section in linker.Sections)
             {
-                this.writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", section.Offset, section.VirtualAddress.ToInt64(), section.Length, section.Name.PadRight(32), section.SectionKind);
+                this.writer.WriteLine ("{0:x16} {1:x16} {2:x16} {3} {4}", section.Offset, section.VirtualAddress.ToInt64 (), section.Length, section.Name.PadRight (32), section.SectionKind);
             }
         }
 
@@ -109,24 +116,24 @@ namespace Mosa.Runtime.Linker
         /// Emits all symbols emitted in the binary file.
         /// </summary>
         /// <param name="linker">The assembly linker.</param>
-        private void EmitSymbols(IAssemblyLinker linker)
+        private void EmitSymbols (IAssemblyLinker linker)
         {
-			this.writer.WriteLine("Offset           Virtual          Length           Symbol");
+            this.writer.WriteLine ("Offset           Virtual          Length           Symbol");
             foreach (LinkerSymbol symbol in linker.Symbols)
             {
-				this.writer.WriteLine("{0:x16} {1:x16} {2:x16} {3}", symbol.Offset, symbol.VirtualAddress.ToInt64(), symbol.Length, symbol.Name);
+                this.writer.WriteLine ("{0:x16} {1:x16} {2:x16} {3}", symbol.Offset, symbol.VirtualAddress.ToInt64 (), symbol.Length, symbol.Name);
             }
 
             LinkerSymbol entryPoint = linker.EntryPoint;
             if (null != entryPoint)
             {
-                this.writer.WriteLine();
-                this.writer.WriteLine("Entry point is {0}", entryPoint.Name);
-                this.writer.WriteLine("\tat offset {0:x16}", entryPoint.Offset);
-                this.writer.WriteLine("\tat virtual address {0:x16}", entryPoint.VirtualAddress.ToInt64());
+                this.writer.WriteLine ();
+                this.writer.WriteLine ("Entry point is {0}", entryPoint.Name);
+                this.writer.WriteLine ("\tat offset {0:x16}", entryPoint.Offset);
+                this.writer.WriteLine ("\tat virtual address {0:x16}", entryPoint.VirtualAddress.ToInt64 ());
             }
         }
 
-        #endregion // Internals
+        #endregion
     }
 }

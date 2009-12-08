@@ -17,10 +17,10 @@ namespace Mosa.Runtime.Metadata
         /// <summary>
         /// 
         /// </summary>
-        ContainsMetaData = 0x0000,
+        ContainsMetaData = 0x0,
         /// <summary>
         /// 
         /// </summary>
-        ContainsNoMetaData = 0x0001
+        ContainsNoMetaData = 0x1
     }
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -35,7 +35,7 @@ namespace Mosa.Runtime.Metadata.Runtime
         /// </summary>
         private TokenTypes signatureBlobIdx;
 
-        #endregion // Data Members
+        #endregion
 
         #region Construction
 
@@ -47,8 +47,7 @@ namespace Mosa.Runtime.Metadata.Runtime
         /// <param name="method">The method.</param>
         /// <param name="maxParam">The max param.</param>
         /// <param name="declaringType">Type of the declaring.</param>
-        public CilRuntimeMethod(int token, IMetadataModule module, ref MethodDefRow method, TokenTypes maxParam, RuntimeType declaringType) :
-            base((int)token, module, declaringType)
+        public CilRuntimeMethod (int token, IMetadataModule module, ref MethodDefRow method, TokenTypes maxParam, RuntimeType declaringType) : base((int)token, module, declaringType)
         {
             this.nameIdx = method.NameStringIdx;
             this.signatureBlobIdx = method.SignatureBlobIdx;
@@ -59,8 +58,8 @@ namespace Mosa.Runtime.Metadata.Runtime
             if (method.ParamList < maxParam)
             {
                 int count = maxParam - method.ParamList;
-                int p = (int)(method.ParamList & TokenTypes.RowIndexMask) - 1 + RuntimeBase.Instance.TypeLoader.GetModuleOffset(module).ParameterOffset;
-                base.Parameters = new ReadOnlyRuntimeParameterListView(p, count);
+                int p = (int)(method.ParamList & TokenTypes.RowIndexMask) - 1 + RuntimeBase.Instance.TypeLoader.GetModuleOffset (module).ParameterOffset;
+                base.Parameters = new ReadOnlyRuntimeParameterListView (p, count);
             }
             else
             {
@@ -68,7 +67,7 @@ namespace Mosa.Runtime.Metadata.Runtime
             }
         }
 
-        #endregion // Construction
+        #endregion
 
         #region RuntimeMethod Overrides
 
@@ -79,33 +78,33 @@ namespace Mosa.Runtime.Metadata.Runtime
         /// <returns>
         /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
-        public override bool Equals(RuntimeMethod other)
+        public override bool Equals (RuntimeMethod other)
         {
             CilRuntimeMethod crm = other as CilRuntimeMethod;
-            return (crm != null && this.nameIdx == crm.nameIdx && this.signatureBlobIdx == crm.signatureBlobIdx && base.Equals(other) == true);
+            return (crm != null && this.nameIdx == crm.nameIdx && this.signatureBlobIdx == crm.signatureBlobIdx && base.Equals (other) == true);
         }
 
         /// <summary>
         /// Gets the method signature.
         /// </summary>
         /// <returns>The method signature.</returns>
-        protected override MethodSignature GetMethodSignature()
+        protected override MethodSignature GetMethodSignature ()
         {
-            return MethodSignature.Parse(this.Module.Metadata, this.signatureBlobIdx);
+            return MethodSignature.Parse (this.Module.Metadata, this.signatureBlobIdx);
         }
 
         /// <summary>
         /// Called to retrieve the name of the type.
         /// </summary>
         /// <returns>The name of the type.</returns>
-        protected override string GetName()
+        protected override string GetName ()
         {
             string name;
-            this.Module.Metadata.Read(this.nameIdx, out name);
-            Debug.Assert(name != null, @"Failed to retrieve CilRuntimeMethod name.");
+            this.Module.Metadata.Read (this.nameIdx, out name);
+            Debug.Assert (name != null, "Failed to retrieve CilRuntimeMethod name.");
             return name;
         }
 
-        #endregion // RuntimeMethod Overrides
+        #endregion
     }
 }

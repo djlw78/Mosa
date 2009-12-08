@@ -7,22 +7,24 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Runtime.Metadata {
+namespace Mosa.Runtime.Metadata
+{
     /// <summary>
     /// 
     /// </summary>
-	public enum CallingConvention {
+    public enum CallingConvention
+    {
         /// <summary>
         /// 
         /// </summary>
-		Default = 0x00,
+        Default = 0x0,
         /// <summary>
         /// 
         /// </summary>
-		Vararg = 0x05,
+        Vararg = 0x5,
         /// <summary>
         /// 
         /// </summary>
-		Generic = 0x10
-	}
+        Generic = 0x10
+    }
 }

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -17,7 +17,7 @@ namespace Mosa.Runtime.Linker
     /// <summary>
     /// Indicates linker exceptions, such as unresolved symbols or duplicate symbols.
     /// </summary>
-    [Serializable]
+    [Serializable()]
     public class LinkerException : CompilationException
     {
         #region Construction
@@ -25,16 +25,15 @@ namespace Mosa.Runtime.Linker
         /// <summary>
         /// Initializes a new instance of the <see cref="LinkerException"/> class.
         /// </summary>
-        public LinkerException()
-        { 
+        public LinkerException ()
+        {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LinkerException"/> class.
         /// </summary>
         /// <param name="message">The message.</param>
-        public LinkerException(string message) : 
-            base(message)
+        public LinkerException (string message) : base(message)
         {
         }
 
@@ -43,8 +42,7 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="inner">The inner.</param>
-        public LinkerException(string message, Exception inner) : 
-            base(message, inner)
+        public LinkerException (string message, Exception inner) : base(message, inner)
         {
         }
 
@@ -53,11 +51,10 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         /// <param name="info">The info.</param>
         /// <param name="context">The context.</param>
-        protected LinkerException(SerializationInfo info, StreamingContext context) : 
-            base(info, context)
+        protected LinkerException (SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
 
-        #endregion // Construction
+        #endregion
     }
 }

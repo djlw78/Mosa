@@ -12,9 +12,9 @@ namespace Mosa.Runtime.Metadata.Tables
     /// <summary>
     /// 
     /// </summary>
-	public struct AssemblyOSRow
+    public struct AssemblyOSRow
     {
-		#region Data members
+        #region Data members
 
         /// <summary>
         /// 
@@ -31,7 +31,7 @@ namespace Mosa.Runtime.Metadata.Tables
         /// </summary>
         private int _minorVersion;
 
-		#endregion // Data members
+        #endregion
 
         #region Construction
 
@@ -41,14 +41,14 @@ namespace Mosa.Runtime.Metadata.Tables
         /// <param name="platformId">The platform id.</param>
         /// <param name="majorVersion">The major version.</param>
         /// <param name="minorVersion">The minor version.</param>
-        public AssemblyOSRow(int platformId, int majorVersion, int minorVersion)
+        public AssemblyOSRow (int platformId, int majorVersion, int minorVersion)
         {
             _platformId = platformId;
             _majorVersion = majorVersion;
             _minorVersion = minorVersion;
         }
 
-        #endregion // Construction
+        #endregion
 
         #region Properties
 
@@ -79,6 +79,6 @@ namespace Mosa.Runtime.Metadata.Tables
             get { return _minorVersion; }
         }
 
-        #endregion // Properties
-	}
+        #endregion
+    }
 }
