@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         private SigType type;
 
-        #endregion // Data members
+        #endregion
 
         #region Construction
 
@@ -49,12 +49,11 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         /// <param name="module">The module the field belongs to.</param>
         /// <param name="declaringType">Specifies the type, which contains this field.</param>
-        public RuntimeField(IMetadataModule module, RuntimeType declaringType) :
-            base(0, module, declaringType, null)
+        public RuntimeField (IMetadataModule module, RuntimeType declaringType) : base(0, module, declaringType, null)
         {
         }
 
-        #endregion // Construction
+        #endregion
 
         #region Properties
 
@@ -84,17 +83,17 @@ namespace Mosa.Runtime.Vm
         /// <value>The type.</value>
         public SigType Type
         {
-            get 
+            get
             {
                 if (this.type != null)
                     return this.type;
 
-                this.type = this.GetFieldType();
+                this.type = this.GetFieldType ();
                 return this.type;
             }
         }
 
-        #endregion // Properties
+        #endregion
 
         #region Methods
 
@@ -102,9 +101,9 @@ namespace Mosa.Runtime.Vm
         /// Gets the type of the field.
         /// </summary>
         /// <returns>The type of the field.</returns>
-        protected abstract SigType GetFieldType();
+        protected abstract SigType GetFieldType ();
 
-        #endregion // Methods
+        #endregion
 
         #region Object Overrides
 
@@ -114,12 +113,12 @@ namespace Mosa.Runtime.Vm
         /// <returns>
         /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </returns>
-        public override string ToString()
+        public override string ToString ()
         {
-            return this.Type.ToString() + ' ' + this.Name;
+            return DeclaringType.ToString () + '.' + Name + " [Type: " + Type.ToString () + ']';
         }
 
-        #endregion // Object Overrides
+        #endregion
 
         #region IEquatable<RuntimeField> Members
 
@@ -130,11 +129,11 @@ namespace Mosa.Runtime.Vm
         /// <returns>
         /// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
         /// </returns>
-        public virtual bool Equals(RuntimeField other)
+        public virtual bool Equals (RuntimeField other)
         {
             return (Module == other.Module && this.attributes == other.attributes);
         }
 
-        #endregion // IEquatable<RuntimeField> Members
+        #endregion
     }
 }
