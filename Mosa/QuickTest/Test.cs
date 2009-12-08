@@ -30,7 +30,7 @@ namespace Mosa.QuickTest
 
             Struct s = new Struct();
 
-			//s.x = 123;
+			s.x = 123;
         }
     }
 }
