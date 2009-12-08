@@ -519,7 +519,7 @@ namespace Mosa.Runtime.Linker
         /// <summary>
         /// Creates a symbol name.
         /// </summary>
-        /// <param name="symbol">The symbol name.</param>
+        /// <param name="signatureType">The symbol name.</param>
         /// <returns>A string, which represents the symbol name.</returns>
         private string CreateSymbolName (SigType signatureType)
         {
