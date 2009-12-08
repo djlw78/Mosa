@@ -12,14 +12,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace Mosa.Runtime.Metadata.Tables 
+namespace Mosa.Runtime.Metadata.Tables
 {
     /// <summary>
     /// 
     /// </summary>
-	public struct CustomAttributeRow 
+    public struct CustomAttributeRow
     {
-		#region Data members
+        #region Data members
 
         /// <summary>
         /// 
@@ -36,7 +36,7 @@ namespace Mosa.Runtime.Metadata.Tables
         /// </summary>
         private TokenTypes _valueBlobIdx;
 
-		#endregion // Data members
+        #endregion
 
         #region Construction
 
@@ -46,14 +46,14 @@ namespace Mosa.Runtime.Metadata.Tables
         /// <param name="parentTableIdx">The parent table idx.</param>
         /// <param name="typeIdx">The type idx.</param>
         /// <param name="valueBlobIdx">The value BLOB idx.</param>
-        public CustomAttributeRow(TokenTypes parentTableIdx, TokenTypes typeIdx, TokenTypes valueBlobIdx)
+        public CustomAttributeRow (TokenTypes parentTableIdx, TokenTypes typeIdx, TokenTypes valueBlobIdx)
         {
             _parentTableIdx = parentTableIdx;
             _typeIdx = typeIdx;
             _valueBlobIdx = valueBlobIdx;
         }
 
-        #endregion // Construction
+        #endregion
 
         #region Properties
 
@@ -84,6 +84,6 @@ namespace Mosa.Runtime.Metadata.Tables
             get { return _valueBlobIdx; }
         }
 
-        #endregion // Properties
-	}
+        #endregion
+    }
 }
