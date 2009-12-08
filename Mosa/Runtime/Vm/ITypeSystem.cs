@@ -29,24 +29,36 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Returns an array of all fields loaded in the type system.
         /// </summary>
-        RuntimeField[] Fields { get; }
+        RuntimeField[] Fields
+        {
+            get;
+        }
 
         /// <summary>
         /// Returns an array of all methods in the type system.
         /// </summary>
-        RuntimeMethod[] Methods { get; }
+        RuntimeMethod[] Methods
+        {
+            get;
+        }
 
         /// <summary>
         /// Returns an array of all parameters in the type system.
         /// </summary>
-        RuntimeParameter[] Parameters { get; }
+        RuntimeParameter[] Parameters
+        {
+            get;
+        }
 
         /// <summary>
         /// Returns an array of all types in the type system.
         /// </summary>
-        RuntimeType[] Types { get; }
+        RuntimeType[] Types
+        {
+            get;
+        }
 
-        #endregion // Properties
+        #endregion
 
         #region Methods
 
@@ -54,21 +66,21 @@ namespace Mosa.Runtime.Vm
         /// Notifies the type system that a CIL module was loaded.
         /// </summary>
         /// <param name="module">The loaded module.</param>
-        void AssemblyLoaded(IMetadataModule module);
+        void AssemblyLoaded (IMetadataModule module);
 
         /// <summary>
         /// Gets the types From module.
         /// </summary>
         /// <param name="module">The module.</param>
         /// <returns></returns>
-        ReadOnlyRuntimeTypeListView GetTypesFromModule(IMetadataModule module);
+        ReadOnlyRuntimeTypeListView GetTypesFromModule (IMetadataModule module);
 
         /// <summary>
         /// Gets the module offset.
         /// </summary>
         /// <param name="module">The module.</param>
         /// <returns></returns>
-        ModuleOffsets GetModuleOffset(IMetadataModule module);
+        ModuleOffsets GetModuleOffset (IMetadataModule module);
 
         /// <summary>
         /// Finds the type index From token.
@@ -76,7 +88,7 @@ namespace Mosa.Runtime.Vm
         /// <param name="module">The module.</param>
         /// <param name="token">The token.</param>
         /// <returns></returns>
-        int FindTypeIndexFromToken(IMetadataModule module, TokenTypes token);
+        int FindTypeIndexFromToken (IMetadataModule module, TokenTypes token);
 
         /// <summary>
         /// Retrieves the runtime type for a given metadata token.
@@ -84,36 +96,36 @@ namespace Mosa.Runtime.Vm
         /// <param name="module">The module, which owns the token.</param>
         /// <param name="token">The token of the type to load. This can represent a typeref, typedef or typespec token.</param>
         /// <returns>The runtime type of the specified token.</returns>
-        RuntimeType GetType(IMetadataModule module, TokenTypes token);
+        RuntimeType GetType (IMetadataModule module, TokenTypes token);
 
         /// <summary>
         /// Retrieves the runtime type for a given type name.
         /// </summary>
         /// <param name="typeName">The name of the type to locate.</param>
         /// <returns>The located <see cref="RuntimeType"/> or null.</returns>
-        RuntimeType GetType(string typeName);
+        RuntimeType GetType (string typeName);
 
         /// <summary>
         /// Retrieves the _stackFrameIndex definition identified by the given token in the scope.
         /// </summary>
         /// <param name="scope">The scope of the token definition.</param>
         /// <param name="token">The token of the _stackFrameIndex to retrieve.</param>
-        RuntimeField GetField(IMetadataModule scope, TokenTypes token);
+        RuntimeField GetField (IMetadataModule scope, TokenTypes token);
 
         /// <summary>
         /// Retrieves the method definition identified by the given token in the scope.
         /// </summary>
         /// <param name="scope">The scope of the token definition.</param>
         /// <param name="token">The token of the method to retrieve.</param>
-        RuntimeMethod GetMethod(IMetadataModule scope, TokenTypes token);
+        RuntimeMethod GetMethod (IMetadataModule scope, TokenTypes token);
 
         /// <summary>
         /// Retrieves the method for the named internal call.
         /// </summary>
         /// <param name="internalMethod">The internal method to retrieve the implementation for.</param>
         /// <returns>The method currently represented by the internal call.</returns>
-        RuntimeMethod GetImplementationForInternalCall(RuntimeMethod internalMethod);
+        RuntimeMethod GetImplementationForInternalCall (RuntimeMethod internalMethod);
 
-        #endregion // Methods
+        #endregion
     }
 }

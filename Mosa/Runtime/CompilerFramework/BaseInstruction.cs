@@ -175,7 +175,10 @@ namespace Mosa.Runtime.CompilerFramework
             }
 
             if (context.InvokeTarget != null)
-                s = s + " " + context.InvokeTarget;
+                s = s + " " + context.InvokeTarget.ToString();
+
+            if (context.RuntimeField != null)
+                s = s + " " + context.RuntimeField.ToString();
 
             return s;
         }
