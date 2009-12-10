@@ -118,20 +118,20 @@ namespace Mosa.Platforms.x86
         {
             bool eax = false;
 
-            if (ctx.OperandCount != 0 && ctx.Operand1 != null)
-            {
-                Operand retval = ctx.Operand1;
-                if (retval.IsRegister)
-                {
-                    // Do not move, if return value is already in EAX
-                    RegisterOperand rop = (RegisterOperand)retval;
-                    if (System.Object.ReferenceEquals (rop.Register, GeneralPurposeRegister.EAX))
-                        eax = true;
-                }
+            if (ctx.OperandCount == 0 || ctx.Operand1 == null) 
+                return;
 
-                if (!eax)
-                    ctx.SetInstruction (CPUx86.Instruction.MovInstruction, new RegisterOperand (new SigType (CilElementType.I), GeneralPurposeRegister.EAX), retval);
+            Operand retval = ctx.Operand1;
+            if (retval.IsRegister)
+            {
+                // Do not move, if return value is already in EAX
+                RegisterOperand rop = (RegisterOperand)retval;
+                if (ReferenceEquals (rop.Register, GeneralPurposeRegister.EAX))
+                    eax = true;
             }
+
+            if (!eax)
+                ctx.SetInstruction (CPUx86.Instruction.MovInstruction, new RegisterOperand (new SigType (CilElementType.I), GeneralPurposeRegister.EAX), retval);
         }
 
         /// <summary>
@@ -982,7 +982,6 @@ namespace Mosa.Platforms.x86
         private void HandleInvokeInstruction (Context ctx)
         {
             ICallingConvention cc = Architecture.GetCallingConvention (ctx.InvokeTarget.Signature.CallingConvention);
-            Debug.Assert (null != cc, "Failed to retrieve the calling convention.");
             cc.Expand (ctx);
         }
 
