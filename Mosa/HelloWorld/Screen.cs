@@ -17,11 +17,11 @@ namespace Mosa.HelloWorld
 		/// <summary>
 		/// 
 		/// </summary>
-		public static uint Column = 0;
+		public static uint Column;
 		/// <summary>
 		/// 
 		/// </summary>
-		public static uint Row = 0;
+		public static uint Row;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -30,12 +30,12 @@ namespace Mosa.HelloWorld
 		/// <summary>
 		/// 
 		/// </summary>
-		public const uint Columns = 80;
+		private const uint Columns = 80;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		public const uint Rows = 40;
+		private const uint Rows = 40;
 
 		/// <summary>
 		/// Gets the address.
@@ -53,10 +53,11 @@ namespace Mosa.HelloWorld
 		{
 			Column++;
 
-			if (Column >= Columns) {
-				Column = 0;
-				Row++;
-			}
+		    if (Column < Columns) 
+                return;
+
+		    Column = 0;
+		    Row++;
 		}
 
 		/// <summary>
