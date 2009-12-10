@@ -38,7 +38,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>..\bin\Mosa.EmulatedDevices.xml</DocumentationFile>
+    <DocumentationFile>Mosa.EmulatedDevices.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <Optimize>false</Optimize>
@@ -89,6 +89,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Emulated\RAMChip.cs" />
+    <Compile Include="Multiboot.cs" />
     <Compile Include="Setup.cs">
       <SubType>Code</SubType>
     </Compile>
