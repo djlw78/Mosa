@@ -15,23 +15,11 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
     <RootNamespace>Mosa.Emulator</RootNamespace>
     <StartupObject>Mosa.Emulator.Program</StartupObject>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -39,11 +27,11 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>..\bin\Mosa.Emulator.xml</DocumentationFile>
+    <DocumentationFile>Mosa.Emulator.xml</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <Optimize>false</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <RegisterForComInterop>False</RegisterForComInterop>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <WarningLevel>4</WarningLevel>
@@ -58,7 +46,7 @@
     <DocumentationFile>Mosa.Emulator.xml</DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
-    <OutputPath>..\bin\</OutputPath>
+    <OutputPath>..\..\bin\</OutputPath>
     <RegisterForComInterop>False</RegisterForComInterop>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -106,6 +94,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelloWorld\Boot.cs" />
+    <Compile Include="HelloWorld\CMOS.cs" />
+    <Compile Include="Memory.cs" />
+    <Compile Include="HelloWorld\Multiboot.cs" />
+    <Compile Include="HelloWorld\PageFrameAllocator.cs" />
+    <Compile Include="HelloWorld\PageTable.cs" />
+    <Compile Include="HelloWorld\Screen.cs" />
     <Compile Include="PlatformSpecificWindow.cs">
       <SubType>Form</SubType>
     </Compile>

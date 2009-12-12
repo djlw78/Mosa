@@ -110,7 +110,7 @@ namespace Mosa.Kernel.Memory.X86
 		/// <param name="start">The start.</param>
 		/// <param name="size">The size.</param>
 		/// <param name="readOnly">if set to <c>true</c> [read only].</param>
-		private static void SetupIdentityPages(uint start, uint size, bool readOnly)
+		public static void SetupIdentityPages(uint start, uint size, bool readOnly)
 		{
 			if (size == 0) return;
 

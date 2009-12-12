@@ -8,6 +8,8 @@
  */
 
 using System;
+using System.Windows.Forms;
+
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
@@ -24,11 +26,20 @@ namespace Mosa.Emulator
 	public class Program
 	{
 		/// <summary>
-		/// Main
+		/// The main entry point for the application.
 		/// </summary>
-		/// <param name="args">The args.</param>
 		[STAThread]
-		public static void Main(string[] args)
+		static void Main()
+		{
+			Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
+			Start();
+		}
+
+		/// <summary>
+		/// Starts this instance.
+		/// </summary>
+		public static void Start()
 		{
 			// Setup hardware abstraction interface
 			IHardwareAbstraction hardwareAbstraction = new Mosa.EmulatedKernel.HardwareAbstraction();
@@ -58,17 +69,11 @@ namespace Mosa.Emulator
 			// Create pci controller devices
 			pciControllerManager.CreatePartitionDevices();
 
-			// Create synthetic keyboard device
-			Mosa.EmulatedDevices.Synthetic.Keyboard keyboard = new Mosa.EmulatedDevices.Synthetic.Keyboard();
-
-			// Add the emulated keyboard device to the device drivers
-			Mosa.DeviceSystem.Setup.DeviceManager.Add(keyboard);
-
 			// Create synthetic graphic pixel device
-			//Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice pixelGraphicDevice = new Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice(500, 500);
+			Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice pixelGraphicDevice = new Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice(Mosa.EmulatedDevices.Setup.PrimaryDisplayForm);
 
 			// Added the synthetic graphic device to the device drivers
-			//Mosa.DeviceSystem.Setup.DeviceManager.Add(pixelGraphicDevice);
+			Mosa.DeviceSystem.Setup.DeviceManager.Add(pixelGraphicDevice);
 
 			// Create synthetic ram disk device
 			Mosa.EmulatedDevices.Synthetic.RamDiskDevice ramDiskDevice = new Mosa.EmulatedDevices.Synthetic.RamDiskDevice(1024 * 1024 * 10 / 512);
@@ -87,6 +92,12 @@ namespace Mosa.Emulator
 
 			// Create a screen interface to the text VGA device
 			ITextScreen screen = new TextScreen((ITextDevice)devices.First.value);
+
+			// Create synthetic keyboard device
+			Mosa.EmulatedDevices.Synthetic.Keyboard keyboard = new Mosa.EmulatedDevices.Synthetic.Keyboard(Mosa.EmulatedDevices.Setup.PrimaryDisplayForm);
+
+			// Add the synthetic keyboard device to the device drivers
+			Mosa.DeviceSystem.Setup.DeviceManager.Add(keyboard);
 
 			// Create master boot block record
 			MasterBootBlock mbr = new MasterBootBlock(ramDiskDevice);
@@ -238,10 +249,11 @@ namespace Mosa.Emulator
 				}
 			}
 
-			// EmulatorDemo.StartDemo();
+			//while (keyboard.GetKeyPressed() == null) ;
 
+			Mosa.HelloWorld.Boot.Main();
 
-			//Key key = keyboard.GetKeyPressed();
+			//EmulatorDemo.StartDemo();
 
 			return;
 		}

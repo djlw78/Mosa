@@ -8,6 +8,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+
 using Mosa.DeviceSystem;
 
 namespace Mosa.EmulatedDevices.Synthetic
@@ -17,6 +19,10 @@ namespace Mosa.EmulatedDevices.Synthetic
 	/// </summary>
 	public class Keyboard : Device, IKeyboard
 	{
+		/// <summary>
+		/// 
+		/// </summary>
+		public delegate void KeyPressed(Key key);
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Keyboard"/> class.
@@ -29,10 +35,44 @@ namespace Mosa.EmulatedDevices.Synthetic
 		}
 
 		/// <summary>
-		/// Gets the key pressed.
+		/// Initializes a new instance of the <see cref="Keyboard"/> class.
+		/// </summary>
+		public Keyboard(DisplayForm display)
+		{
+			base.name = "EmulatedKeyboard";
+			base.parent = null;
+			base.deviceStatus = DeviceStatus.Online;
+			display.onKeyPressed = this.AcceptKey;
+		}
+
+		private Queue<Key> keys = new Queue<Key>();
+
+		/// <summary>
+		/// Accepts the key.
+		/// </summary>
+		/// <param name="key">The key.</param>
+		public void AcceptKey(Key key)
+		{
+			keys.Enqueue(key);
+		}
+
+		/// <summary>
+		/// Gets the key.
 		/// </summary>
 		/// <returns></returns>
 		public Key GetKeyPressed()
+		{
+			if (keys.Count == 0)
+				return null;
+
+			return keys.Dequeue();
+		}
+
+		/// <summary>
+		/// Gets the key pressed.
+		/// </summary>
+		/// <returns></returns>
+		public Key GetKeyPressed_OLD()
 		{
 			Key key = new Key();
 

@@ -28,7 +28,6 @@ namespace Mosa.QuickTest
         public static void Main()
         {
             Struct s = new Struct();
-
 			s.x = 123;
         }
     }
