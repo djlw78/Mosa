@@ -9,15 +9,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
-using CPUx86 = Mosa.Platforms.x86.CPUx86;
-using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
@@ -32,7 +29,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Holds the architecture of the calling convention.
         /// </summary>
-        private IArchitecture architecture;
+        private readonly IArchitecture _architecture;
 
         #endregion
 
@@ -47,7 +44,7 @@ namespace Mosa.Platforms.x86
             if (null == architecture)
                 throw new ArgumentNullException ("architecture");
 
-            this.architecture = architecture;
+            _architecture = architecture;
         }
 
         #endregion
@@ -70,7 +67,7 @@ namespace Mosa.Platforms.x86
              * 
              */
 
-            Mosa.Runtime.Vm.RuntimeMethod invokeTarget = ctx.InvokeTarget;
+            Runtime.Vm.RuntimeMethod invokeTarget = ctx.InvokeTarget;
             Operand result = ctx.Result;
             Operand operand1 = ctx.Operand1;
 
@@ -88,7 +85,7 @@ namespace Mosa.Platforms.x86
             if (stackSize != 0)
             {
                 ctx.AppendInstruction (CPUx86.Instruction.SubInstruction, esp, new ConstantOperand (I, stackSize));
-                ctx.AppendInstruction (CPUx86.Instruction.MovInstruction, new RegisterOperand (architecture.NativeType, GeneralPurposeRegister.EDX), esp);
+                ctx.AppendInstruction (CPUx86.Instruction.MovInstruction, new RegisterOperand (_architecture.NativeType, GeneralPurposeRegister.EDX), esp);
 
                 Stack<Operand> operandStack = GetOperandStackFromInstruction (operands, operandCount, invokeTarget.Signature.HasThis);
 
@@ -155,7 +152,7 @@ namespace Mosa.Platforms.x86
                 Operand operand = operandStack.Pop ();
                 int size, alignment;
 
-                architecture.GetTypeRequirements (operand.Type, out size, out alignment);
+                _architecture.GetTypeRequirements (operand.Type, out size, out alignment);
                 space -= size;
                 Push (ctx, operand, space);
             }
@@ -166,7 +163,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="resultOperand">The result operand.</param>
         /// <param name="ctx">The context.</param>
-        private void MoveReturnValueTo32Bit (Operand resultOperand, Context ctx)
+        private static void MoveReturnValueTo32Bit (Operand resultOperand, Context ctx)
         {
             RegisterOperand eax = new RegisterOperand (resultOperand.Type, GeneralPurposeRegister.EAX);
             ctx.AppendInstruction (CPUx86.Instruction.MovInstruction, resultOperand, eax);
@@ -177,7 +174,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="resultOperand">The result operand.</param>
         /// <param name="ctx">The context.</param>
-        private void MoveReturnValueTo64Bit (Operand resultOperand, Context ctx)
+        private static void MoveReturnValueTo64Bit (Operand resultOperand, Context ctx)
         {
             SigType I4 = new SigType (CilElementType.I4);
             SigType U4 = new SigType (CilElementType.U4);
@@ -273,11 +270,12 @@ namespace Mosa.Platforms.x86
         private int CalculateStackSizeForParameters (Context ctx)
         {
             int result = (ctx.InvokeTarget.Signature.HasThis ? -4 : 0);
-            int size, alignment;
+            int size;
 
             foreach (Operand op in ctx.Operands)
             {
-                this.architecture.GetTypeRequirements (op.Type, out size, out alignment);
+                int alignment;
+                _architecture.GetTypeRequirements (op.Type, out size, out alignment);
                 result += size;
             }
             return result;
@@ -292,11 +290,12 @@ namespace Mosa.Platforms.x86
         private int CalculateStackSizeForParameters (IEnumerable<Operand> operands, bool hasThis)
         {
             int result = (hasThis ? -4 : 0);
-            int size, alignment;
 
             foreach (Operand op in operands)
             {
-                this.architecture.GetTypeRequirements (op.Type, out size, out alignment);
+                int size;
+                int alignment;
+                _architecture.GetTypeRequirements (op.Type, out size, out alignment);
                 result += size;
             }
             return result;
@@ -311,7 +310,7 @@ namespace Mosa.Platforms.x86
         void ICallingConvention.MoveReturnValue (Context ctx, Operand operand)
         {
             int size, alignment;
-            this.architecture.GetTypeRequirements (operand.Type, out size, out alignment);
+            _architecture.GetTypeRequirements (operand.Type, out size, out alignment);
 
             // FIXME: Do not issue a move, if the operand is already the destination register
             if (4 == size || 2 == size || 1 == size)
@@ -319,11 +318,12 @@ namespace Mosa.Platforms.x86
                 ctx.SetInstruction (CPUx86.Instruction.MovInstruction, new RegisterOperand (operand.Type, GeneralPurposeRegister.EAX), operand);
                 return;
             }
-            else if (8 == size && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
+            if (8 == size && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
             {
                 ctx.SetInstruction (CPUx86.Instruction.MovInstruction, new RegisterOperand (operand.Type, SSE2Register.XMM0), operand);
                 return;
-            }            else if (8 == size && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8))
+            }
+            if (8 == size && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8))
             {
                 SigType I4 = new SigType (CilElementType.I4);
                 SigType U4 = new SigType (CilElementType.U4);
@@ -337,17 +337,14 @@ namespace Mosa.Platforms.x86
 
                 return;
             }
-            else
-            {
-                throw new NotSupportedException ();
-            }
+            throw new NotSupportedException ();
         }
 
         void ICallingConvention.GetStackRequirements (StackOperand stackOperand, out int size, out int alignment)
         {
             // Special treatment for some stack types
             // FIXME: Handle the size and alignment requirements of value types
-            this.architecture.GetTypeRequirements (stackOperand.Type, out size, out alignment);
+            _architecture.GetTypeRequirements (stackOperand.Type, out size, out alignment);
         }
 
         /// <summary>
