@@ -13,6 +13,7 @@ using System.Text;
 using System.Diagnostics;
 
 using Mosa.Runtime.Metadata;
+using System.IO;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -49,6 +50,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="immediateAfter">The immediate after.</param>
         public InstructionLogger(Type immediateAfter)
         {
+            OpenLogfile();
             _pipelineOrder = PipelineStageOrder.CreatePipelineOrder(immediateAfter);
         }
 
@@ -59,6 +61,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="before">The before.</param>
         public InstructionLogger(IPipelineStage after, IPipelineStage before)
         {
+            OpenLogfile();
             _pipelineOrder = PipelineStageOrder.CreatePipelineOrder(after.GetType(), before.GetType());
         }
 
@@ -69,6 +72,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="before">The before.</param>
         public InstructionLogger(Type after, Type before)
         {
+            OpenLogfile();
             _pipelineOrder = PipelineStageOrder.CreatePipelineOrder(after, before);
         }
 
@@ -87,22 +91,22 @@ namespace Mosa.Runtime.CompilerFramework
             // Line number
             int index = 1;
 
-            Debug.WriteLine(_divider);
-            Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", MethodCompiler.Method, prevStage.Name));
+            LogLine(_divider);
+            LogLine(String.Format("IR representation of method {0}.{1} after stage {2}", MethodCompiler.Method.DeclaringType, MethodCompiler.Method, prevStage.Name));
 
             foreach (BasicBlock block in BasicBlocks)
             {
-                Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
+                LogLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
 
                 foreach (BasicBlock prev in block.PreviousBlocks)
-                    Debug.WriteLine(String.Format("  Prev: L_{0:X4}", prev.Label));
+                    LogLine(String.Format("  Prev: L_{0:X4}", prev.Label));
 
                 Debug.Indent();
                 LogInstructions(new Context(InstructionSet, block));
                 Debug.Unindent();
 
                 foreach (BasicBlock next in block.NextBlocks)
-                    Debug.WriteLine(String.Format("  Next: L_{0:X4}", next.Label));
+                    LogLine(String.Format("  Next: L_{0:X4}", next.Label));
 
                 index++;
             }
@@ -112,8 +116,32 @@ namespace Mosa.Runtime.CompilerFramework
 
         #region Internals
 
+        private static StreamWriter logfile = null;
+
         private static string _divider = Environment.NewLine + Environment.NewLine
             + "--------------------------------------------------------------------------------------------------------------";
+
+
+        /// <summary>
+        /// Opens the logfile
+        /// </summary>
+        private void OpenLogfile()
+        {
+            if (logfile == null)
+            {
+                logfile = File.CreateText("mosacl.logfile.txt");
+            }
+        }
+
+        /// <summary>
+        /// Writes line to Debug and Logfile
+        /// </summary>
+        /// <param name="line"></param>
+        private void LogLine(String line)
+        {
+            Debug.WriteLine(line);
+            logfile.WriteLine(line);
+        }
 
         /// <summary>
         /// Logs the instructions in the given enumerable to the trace.
@@ -136,7 +164,7 @@ namespace Mosa.Runtime.CompilerFramework
 
                 text.AppendFormat("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx));
 
-                Debug.WriteLine(text.ToString());
+                LogLine(text.ToString());
             }
         }
 
