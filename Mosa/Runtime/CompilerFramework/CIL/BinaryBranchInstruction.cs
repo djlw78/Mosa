@@ -1,4 +1,4 @@
-/*
+﻿/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -14,145 +14,125 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class BinaryBranchInstruction : BinaryInstruction, IBranchInstruction
-    {
-        #region Construction
+	/// <summary>
+	/// 
+	/// </summary>
+	public sealed class BinaryBranchInstruction : BinaryInstruction, IBranchInstruction
+	{
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BinaryBranchInstruction"/> class.
-        /// </summary>
-        /// <param name="opCode">The opcode.</param>
-        public BinaryBranchInstruction (OpCode opCode) : base(opCode)
-        {
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BinaryBranchInstruction"/> class.
+		/// </summary>
+		/// <param name="opCode">The opcode.</param>
+		public BinaryBranchInstruction(OpCode opCode)
+			: base(opCode)
+		{
+		}
 
-        #endregion
+		#endregion // Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Determines flow behavior of this instruction.
-        /// </summary>
-        /// <value></value>
-        /// <remarks>
-        /// Knowledge of control flow is required for correct basic block
-        /// building. Any instruction that alters the control flow must override
-        /// this property and correctly identify its control flow modifications.
-        /// </remarks>
-        public override FlowControl FlowControl {
-            get { return FlowControl.ConditionalBranch; }
-        }
+		/// <summary>
+		/// Determines flow behavior of this instruction.
+		/// </summary>
+		/// <value></value>
+		/// <remarks>
+		/// Knowledge of control flow is required for correct basic block
+		/// building. Any instruction that alters the control flow must override
+		/// this property and correctly identify its control flow modifications.
+		/// </remarks>
+		public override FlowControl FlowControl
+		{
+			get { return FlowControl.ConditionalBranch; }
+		}
 
-        #endregion
+		#endregion // Properties
 
-        #region Methods
+		#region Methods
 
-        /// <summary>
-        /// Decodes the specified instruction.
-        /// </summary>
-        /// <param name="ctx">The context.</param>
-        /// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-        public override void Decode (Context ctx, IInstructionDecoder decoder)
-        {
-            // Decode base classes first
-            base.Decode (ctx, decoder);
+		/// <summary>
+		/// Decodes the specified instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		{
+			// Decode base classes first
+			base.Decode(ctx, decoder);
 
-            // Read the branch target
-            // Is this a short branch target?
-            // FIXME: Remove unary branch instructions From this list.
-            if (_opcode == OpCode.Beq_s || _opcode == OpCode.Bge_s || _opcode == OpCode.Bge_un_s || _opcode == OpCode.Bgt_s || _opcode == OpCode.Bgt_un_s || _opcode == OpCode.Ble_s || _opcode == OpCode.Ble_un_s || _opcode == OpCode.Blt_s || _opcode == OpCode.Blt_un_s || _opcode == OpCode.Bne_un_s)
-            {
-                sbyte target;
-                decoder.Decode (out target);
-                ctx.SetBranch (target, 0);
-            }
-            else if (_opcode == OpCode.Beq || _opcode == OpCode.Bge || _opcode == OpCode.Bge_un || _opcode == OpCode.Bgt || _opcode == OpCode.Bgt_un || _opcode == OpCode.Ble || _opcode == OpCode.Ble_un || _opcode == OpCode.Blt || _opcode == OpCode.Blt_un || _opcode == OpCode.Bne_un)
-            {
-                int target;
-                decoder.Decode (out target);
-                ctx.SetBranch (target, 0);
-            }
-            else
-            {
-                throw new NotSupportedException ("Invalid branch opcode specified for BinaryBranchInstruction");
-            }
-        }
+			// Read the branch target
+			// Is this a short branch target?
+			// FIXME: Remove unary branch instructions from this list.
+			if (_opcode == OpCode.Beq_s || _opcode == OpCode.Bge_s || _opcode == OpCode.Bge_un_s || _opcode == OpCode.Bgt_s ||
+				_opcode == OpCode.Bgt_un_s || _opcode == OpCode.Ble_s || _opcode == OpCode.Ble_un_s || _opcode == OpCode.Blt_s ||
+				_opcode == OpCode.Blt_un_s || _opcode == OpCode.Bne_un_s) {
+				sbyte target;
+				decoder.Decode(out target);
+				ctx.SetBranch(target);
+			}
+			else if (_opcode == OpCode.Beq || _opcode == OpCode.Bge || _opcode == OpCode.Bge_un || _opcode == OpCode.Bgt ||
+				_opcode == OpCode.Bgt_un || _opcode == OpCode.Ble || _opcode == OpCode.Ble_un || _opcode == OpCode.Blt ||
+				_opcode == OpCode.Blt_un || _opcode == OpCode.Bne_un) {
+				int target;
+				decoder.Decode(out target);
+				ctx.SetBranch(target);
+			}
+			else {
+				throw new NotSupportedException(@"Invalid branch opcode specified for BinaryBranchInstruction");
+			}
+		}
 
-        /// <summary>
-        /// Allows visitor based dispatch for this instruction object.
-        /// </summary>
-        /// <param name="visitor">The visitor.</param>
-        /// <param name="context">The context.</param>
-        public override void Visit (ICILVisitor visitor, Context context)
-        {
-            visitor.BinaryBranch (context);
-        }
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(ICILVisitor visitor, Context context)
+		{
+			visitor.BinaryBranch(context);
+		}
 
 
-        /// <summary>
-        /// Gets the instruction modifier.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <returns></returns>
-        protected override string GetModifier (Context context)
-        {
-            switch (((context.Instruction) as CIL.ICILInstruction).OpCode) {
-                case OpCode.Beq_s:
-                    return "==";
-                case OpCode.Beq:
-                    return "==";
-                case OpCode.Bge_s:
-                    return ">=";
-                case OpCode.Bge:
-                    return ">=";
-                case OpCode.Bge_un_s:
-                    return ">= unordered";
-                case OpCode.Bge_un:
-                    return ">= unordered";
-                case OpCode.Bgt_s:
-                    return ">";
-                case OpCode.Bgt:
-                    return ">";
-                case OpCode.Bgt_un_s:
-                    return "> unordered";
-                case OpCode.Bgt_un:
-                    return "> unordered";
-                case OpCode.Ble_s:
-                    return "<=";
-                case OpCode.Ble:
-                    return "<=";
-                case OpCode.Ble_un_s:
-                    return "<= unordered";
-                case OpCode.Ble_un:
-                    return "<= unordered";
-                case OpCode.Blt_s:
-                    return "<";
-                case OpCode.Blt:
-                    return "<";
-                case OpCode.Blt_un_s:
-                    return "< unordered";
-                case OpCode.Blt_un:
-                    return "< unordered";
-                case OpCode.Bne_un_s:
-                    return "!= unordered";
-                case OpCode.Bne_un:
-                    return "!= unordered";
-                default:
-                    throw new InvalidOperationException ("Opcode not set.");
-            }
-        }
+		/// <summary>
+		/// Gets the instruction modifier.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
+		protected override string GetModifier(Context context)
+		{
+			switch (((context.Instruction) as CIL.ICILInstruction).OpCode) {
+				case OpCode.Beq_s: return @"==";
+				case OpCode.Beq: return @"==";
+				case OpCode.Bge_s: return @">=";
+				case OpCode.Bge: return @">=";
+				case OpCode.Bge_un_s: return @">= unordered";
+				case OpCode.Bge_un: return @">= unordered";
+				case OpCode.Bgt_s: return @">";
+				case OpCode.Bgt: return @">";
+				case OpCode.Bgt_un_s: return @"> unordered";
+				case OpCode.Bgt_un: return @"> unordered";
+				case OpCode.Ble_s: return @"<=";
+				case OpCode.Ble: return @"<=";
+				case OpCode.Ble_un_s: return @"<= unordered";
+				case OpCode.Ble_un: return @"<= unordered";
+				case OpCode.Blt_s: return @"<";
+				case OpCode.Blt: return @"<";
+				case OpCode.Blt_un_s: return @"< unordered";
+				case OpCode.Blt_un: return @"< unordered";
+				case OpCode.Bne_un_s: return @"!= unordered";
+				case OpCode.Bne_un: return @"!= unordered";
+				default: throw new InvalidOperationException(@"Opcode not set.");
+			}
+		}
 
-        #endregion Methods
+		#endregion Methods
 
-        /// <summary>
-        /// Determines if the branch is conditional.
-        /// </summary>
-        /// <value></value>
-        public bool IsConditional {
-            get { return true; }
-        }
-    }
+		/// <summary>
+		/// Determines if the branch is conditional.
+		/// </summary>
+		/// <value></value>
+		public bool IsConditional { get { return true; } }
+	}
 }
