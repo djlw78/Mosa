@@ -34,27 +34,21 @@ namespace Mosa.Platforms.x86
         /// Retrieves the name of the compilation stage.
         /// </summary>
         /// <value>The name of the compilation stage.</value>
-        string IPipelineStage.Name
-        {
-            get { return "X86.SimplePeepholeOptimizationStage"; }
-        }
+        string IPipelineStage.Name { get { return @"X86.SimplePeepholeOptimizationStage"; } }
 
         private static PipelineStageOrder[] _pipelineOrder = new PipelineStageOrder[] {
-            new PipelineStageOrder (PipelineStageOrder.Location.After, typeof(IBlockReorderStage)),
-            new PipelineStageOrder (PipelineStageOrder.Location.After, typeof(MemToMemConversionStage)),
-            new PipelineStageOrder (PipelineStageOrder.Location.Before, typeof(CodeGenerationStage))
-        };
+				new PipelineStageOrder(PipelineStageOrder.Location.After, typeof(MemToMemConversionStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(IBlockReorderStage)),
+				new PipelineStageOrder(PipelineStageOrder.Location.Before, typeof(CodeGenerationStage))
+			};
 
         /// <summary>
         /// Gets the pipeline stage order.
         /// </summary>
         /// <value>The pipeline stage order.</value>
-        PipelineStageOrder[] IPipelineStage.PipelineStageOrder
-        {
-            get { return _pipelineOrder; }
-        }
+        PipelineStageOrder[] IPipelineStage.PipelineStageOrder { get { return _pipelineOrder; } }
 
-        #endregion
+        #endregion // IMethodCompilerStage Members
 
         #region Window Class
 
@@ -71,7 +65,7 @@ namespace Mosa.Platforms.x86
             /// Initializes a new instance of the <see cref="Window"/> class.
             /// </summary>
             /// <param name="length">The length.</param>
-            public Window (int length)
+            public Window(int length)
             {
                 _length = length;
                 _history = new Context[length];
@@ -91,14 +85,12 @@ namespace Mosa.Platforms.x86
             /// Nexts the specified CTX.
             /// </summary>
             /// <param name="ctx">The CTX.</param>
-            public void Add (Context ctx)
+            public void Add(Context ctx)
             {
                 for (int i = _length - 1; i > 0; i--)
-                {
                     _history[i] = _history[i - 1];
-                }
 
-                _history[0] = ctx.Clone ();
+                _history[0] = ctx.Clone();
                 if (_size < _length)
                     _size++;
             }
@@ -106,40 +98,34 @@ namespace Mosa.Platforms.x86
             /// <summary>
             /// Deletes the current.
             /// </summary>
-            public void DeleteCurrent ()
+            public void DeleteCurrent()
             {
-                _history[0].Remove ();
+                _history[0].Remove();
                 _size--;
                 for (int i = 0; i < _size; i++)
-                {
                     _history[i] = _history[i + 1];
-                }
             }
 
             /// <summary>
             /// Deletes the previous.
             /// </summary>
-            public void DeletePrevious ()
+            public void DeletePrevious()
             {
-                _history[1].Remove ();
+                _history[1].Remove();
                 _size--;
                 for (int i = 1; i < _size; i++)
-                {
                     _history[i] = _history[i + 1];
-                }
             }
 
             /// <summary>
             /// Deletes the previous previous.
             /// </summary>
-            public void DeletePreviousPrevious ()
+            public void DeletePreviousPrevious()
             {
-                _history[2].Remove ();
+                _history[2].Remove();
                 _size--;
                 for (int i = 2; i < _size; i++)
-                {
                     _history[i] = _history[i + 1];
-                }
             }
 
             /// <summary>
@@ -188,29 +174,25 @@ namespace Mosa.Platforms.x86
             }
         }
 
-        #endregion
+        #endregion  // Windows Class
 
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
-        public override void Run ()
+        public override void Run()
         {
-            Window window = new Window (5);
+            Window window = new Window(5);
 
             foreach (BasicBlock block in BasicBlocks)
-            {
-                for (Context ctx = CreateContext (block); !ctx.EndOfInstruction; ctx.GotoNext ())
-                {
+                for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
                     if (ctx.Instruction != null && !ctx.Ignore)
                     {
-                        window.Add (ctx);
+                        window.Add(ctx);
 
                         //RemoveMultipleStores(window);
                         //RemoveSingleLineJump(window);
                         //ImproveBranchAndJump(window);
                     }
-                }
-            }
         }
 
         /// <summary>
@@ -226,7 +208,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="window">The window.</param>
         /// <returns>True if an instruction has been removed</returns>
-        private bool RemoveMultipleStores (Window window)
+        private bool RemoveMultipleStores(Window window)
         {
             if (window.Size < 2)
                 return false;
@@ -238,7 +220,7 @@ namespace Mosa.Platforms.x86
             {
                 if (window.Previous.Result == window.Current.Operand1 && window.Previous.Operand1 == window.Current.Result)
                 {
-                    window.DeleteCurrent ();
+                    window.DeleteCurrent();
                     return true;
                 }
             }
@@ -251,17 +233,16 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="window">The window.</param>
         /// <returns></returns>
-        private bool RemoveSingleLineJump (Window window)
+        private bool RemoveSingleLineJump(Window window)
         {
             if (window.Size < 2)
                 return false;
 
             if (window.Previous.Instruction is CPUx86.JmpInstruction)
-                if (window.Current.BasicBlock != window.Previous.BasicBlock)
-                    // should always be true
+                if (window.Current.BasicBlock != window.Previous.BasicBlock)	// should always be true
                     if (window.Previous.Branch.Targets[0] == window.Current.BasicBlock.Label)
                     {
-                        window.DeletePrevious ();
+                        window.DeletePrevious();
                         return true;
                     }
 
@@ -273,7 +254,7 @@ namespace Mosa.Platforms.x86
         /// </summary>
         /// <param name="window">The window.</param>
         /// <returns></returns>
-        private bool ImproveBranchAndJump (Window window)
+        private bool ImproveBranchAndJump(Window window)
         {
             if (window.Size < 3)
                 return false;
@@ -284,16 +265,16 @@ namespace Mosa.Platforms.x86
                         if (window.Current.BasicBlock != window.Previous.BasicBlock)
                             if (window.PreviousPrevious.Branch.Targets[0] == window.Current.BasicBlock.Label)
                             {
-                                Debug.Assert (window.PreviousPrevious.Branch.Targets.Length == 1);
+                                Debug.Assert(window.PreviousPrevious.Branch.Targets.Length == 1);
 
                                 // Negate branch condition
-                                window.PreviousPrevious.ConditionCode = GetOppositeConditionCode (window.PreviousPrevious.ConditionCode);
+                                window.PreviousPrevious.ConditionCode = GetOppositeConditionCode(window.PreviousPrevious.ConditionCode);
 
                                 // Change branch target
                                 window.PreviousPrevious.Branch.Targets[0] = window.Previous.Branch.Targets[0];
 
                                 // Delete jump
-                                window.DeletePrevious ();
+                                window.DeletePrevious();
 
                                 return true;
                             }
