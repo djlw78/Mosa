@@ -22,6 +22,7 @@ namespace Mosa.Emulator
 	/// </summary>
 	public partial class MemoryForm : Form
 	{
+        private Timer _timer = new Timer();
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MemoryForm"/> class.
 		/// </summary>
@@ -29,9 +30,13 @@ namespace Mosa.Emulator
 		{
 			InitializeComponent();
 			Update();
+		    _timer.Interval = 500;
+		    _timer.Tick += TimerEvent;
+
+            _timer.Start();
 		}
 
-		private void Update()
+		new private void Update()
 		{
 			string nbr = tbMemory.Text.ToUpper().Trim();
 			int digits = 10;
@@ -53,11 +58,13 @@ namespace Mosa.Emulator
 
 			lbMemory.Items.Clear();
 
-			while (line < lines) {
+			while (line < lines) 
+            {
 				string l = at.ToString("X").PadLeft(8, '0') + ':';
 				string d = string.Empty;
-				for (int x = 0; x < 16; x++) {
-					byte mem = Mosa.EmulatedKernel.MemoryDispatch.Read8(at);
+				for (int x = 0; x < 16; x++) 
+                {
+					byte mem = EmulatedKernel.MemoryDispatch.Read8(at);
 					if (x % 4 == 0) l = l + ' ';
 					l = l + mem.ToString("X").PadLeft(2, '0');
 					char b = (char)mem;
@@ -84,6 +91,19 @@ namespace Mosa.Emulator
 		{
 			Update();
 		}
+
+        private void TimerEvent(object sender, EventArgs e)
+        {
+            Update();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+                _timer.Start();
+            else
+                _timer.Stop();        
+        }
 
 	}
 }
