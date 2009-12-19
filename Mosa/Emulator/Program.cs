@@ -9,6 +9,7 @@
 
 using System;
 using System.Windows.Forms;
+using System.Threading;
 
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
@@ -33,7 +34,25 @@ namespace Mosa.Emulator
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+			SetupPrimaryDisplayForm();
 			Start();
+		}
+
+		/// <summary>
+		/// Setups the primary display form.
+		/// </summary>
+		public static void SetupPrimaryDisplayForm()
+		{
+			Thread thread = new Thread(new ThreadStart(CreateMemoryForm));
+			thread.Start();
+		}
+
+		/// <summary>
+		/// Creates the form.
+		/// </summary>
+		private static void CreateMemoryForm()
+		{
+			Application.Run(new MemoryForm());
 		}
 
 		/// <summary>
@@ -251,7 +270,7 @@ namespace Mosa.Emulator
 
 			//while (keyboard.GetKeyPressed() == null) ;
 
-			Mosa.HelloWorld.Boot.BootMain();
+			Mosa.HelloWorld.Boot.Main();
 
 			//EmulatorDemo.StartDemo();
 
